@@ -17,6 +17,10 @@
 
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE    := bullet3
+LOCAL_SRC_FILES := ../libs/libBullet.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := assimp
@@ -58,6 +62,8 @@ LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/LibOVRKernel/Src
 LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrApi/Include
 LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrAppSupport/Src
 LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrAppSupport/SystemUtils/Include
+
+LOCAL_C_INCLUDES +=	$(LOCAL_PATH)/contrib/bullet3/include
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/contrib/assimp
 LOCAL_C_INCLUDES +=	$(LOCAL_PATH)/contrib/assimp/include
@@ -125,6 +131,7 @@ FILE_LIST := $(wildcard $(GVRF_BACKEND)/src/main/jni/*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
 #LOCAL_STATIC_LIBRARIES += staticAssimp
+LOCAL_SHARED_LIBRARIES += bullet3
 LOCAL_SHARED_LIBRARIES += assimp
 LOCAL_SHARED_LIBRARIES += vrapi
 LOCAL_STATIC_LIBRARIES += systemutils
