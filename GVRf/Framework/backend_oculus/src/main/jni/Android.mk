@@ -15,6 +15,10 @@
  #
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE    := bullet3
+LOCAL_SRC_FILES := ../libs/libBullet.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
@@ -29,9 +33,17 @@ LOCAL_MODULE := gvrf-oculus
 LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrApi/Include
 LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrAppSupport/SystemUtils/Include
 
+<<<<<<< 32c455f17e280b772e3ac7bfeb7981da48f5c519
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/util
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/contrib
+=======
+LOCAL_C_INCLUDES +=	$(LOCAL_PATH)/contrib/bullet3/include
+
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/contrib/assimp
+LOCAL_C_INCLUDES +=	$(LOCAL_PATH)/contrib/assimp/include
+LOCAL_C_INCLUDES +=	$(LOCAL_PATH)/contrib/assimp/include/Compiler
+>>>>>>> Add bullet3 module
 
 # Uncomment for logs
 # LOCAL_CFLAGS += -DANDROID -DJNI_LOG
@@ -49,6 +61,12 @@ LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 FILE_LIST := $(wildcard $(LOCAL_PATH)/monoscopic/*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
+<<<<<<< 32c455f17e280b772e3ac7bfeb7981da48f5c519
+=======
+#LOCAL_STATIC_LIBRARIES += staticAssimp
+LOCAL_SHARED_LIBRARIES += bullet3
+LOCAL_SHARED_LIBRARIES += assimp
+>>>>>>> Add bullet3 module
 LOCAL_SHARED_LIBRARIES += vrapi
 LOCAL_STATIC_LIBRARIES += systemutils
 
