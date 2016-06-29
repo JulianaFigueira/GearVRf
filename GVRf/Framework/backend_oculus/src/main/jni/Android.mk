@@ -15,6 +15,10 @@
  #
 LOCAL_PATH := $(call my-dir)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE    := bullet3
+LOCAL_SRC_FILES := ../libs/libBullet.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
@@ -32,6 +36,7 @@ LOCAL_C_INCLUDES += $(OVR_MOBILE_SDK)/VrAppSupport/SystemUtils/Include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/util
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../framework/src/main/jni/contrib
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/contrib/bullet3/include
 
 # Uncomment for logs
 # LOCAL_CFLAGS += -DANDROID -DJNI_LOG
@@ -49,6 +54,7 @@ LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 FILE_LIST := $(wildcard $(LOCAL_PATH)/monoscopic/*.cpp)
 LOCAL_SRC_FILES += $(FILE_LIST:$(LOCAL_PATH)/%=%)
 
+LOCAL_SHARED_LIBRARIES += bullet3
 LOCAL_SHARED_LIBRARIES += vrapi
 LOCAL_STATIC_LIBRARIES += systemutils
 
