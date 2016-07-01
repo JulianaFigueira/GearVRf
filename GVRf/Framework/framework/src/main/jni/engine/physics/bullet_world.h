@@ -17,8 +17,8 @@
  * Bullet implementation of 3D world
  ***************************************************************************/
 
-#ifndef BULLET_3DWORLD_H_
-#define BULLET_3DWORLD_H_
+#ifndef BULLET_WORLD_H_
+#define BULLET_WORLD_H_
 
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
@@ -27,10 +27,10 @@
 
 #include "physics_3dworld.h"
 
-class Bullet3DWorld : public Physics3DWorld {
+class BulletWorld : public Physics3DWorld {
 public:
-	Bullet3DWorld();
-	~Bullet3DWorld();
+	BulletWorld();
+	~BulletWorld();
 
 private:
 	void initialize();
@@ -46,4 +46,4 @@ private: // Aux vars
 	btSequentialImpulseConstraintSolver* mSolver;
 };
 
-#endif /* BULLET_3DWORLD_H_ */
+#endif /* BULLET_WORLD_H_ */

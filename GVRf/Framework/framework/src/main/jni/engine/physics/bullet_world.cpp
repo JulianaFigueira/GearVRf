@@ -13,17 +13,17 @@
  * limitations under the License.
  */
 
-#include "bullet_3dworld.h"
+#include "bullet_world.h"
 
-Bullet3DWorld::Bullet3DWorld() {
+BulletWorld::BulletWorld() {
 	initialize();
 }
 
-Bullet3DWorld::~Bullet3DWorld() {
+BulletWorld::~BulletWorld() {
 	// TODO Auto-generated destructor stub
 }
 
-void Bullet3DWorld::initialize() {
+void BulletWorld::initialize() {
 		// Default setup for memory, collision setup.
 		mCollisionConfiguration = new btDefaultCollisionConfiguration();
 
@@ -41,7 +41,7 @@ void Bullet3DWorld::initialize() {
 		mDynamicsWorld->setGravity(btVector3(0, -10, 0));
 }
 
-void Bullet3DWorld::finalize() {
+void BulletWorld::finalize() {
 		//delete dynamics world
 		delete mDynamicsWorld;
 
