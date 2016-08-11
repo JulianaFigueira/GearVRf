@@ -20,9 +20,17 @@
 #ifndef PHYSICS_WORLD_H_
 #define PHYSICS_WORLD_H_
 
+#include "physics_rigidbody.h"
+
+namespace gvr {
 class PhysicsWorld {
 public:
+	virtual ~PhysicsWorld() = 0;
 
+	virtual void addRigidBody (PhysicsRigidBody *body) = 0;
+
+	virtual void removeRigidBody (PhysicsRigidBody *body) = 0;
 };
+}
 
 #endif /* PHYSICS_WORLD_H_ */

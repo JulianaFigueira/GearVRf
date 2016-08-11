@@ -14,13 +14,20 @@
  */
 
 #include "bullet_world.h"
+#include "bullet_rigidbody.h"
+
+namespace gvr {
 
 BulletWorld::BulletWorld() {
 	initialize();
 }
 
+PhysicsWorld::~PhysicsWorld() {
+
+}
+
 BulletWorld::~BulletWorld() {
-	// TODO Auto-generated destructor stub
+	finalize();
 }
 
 void BulletWorld::initialize() {
@@ -28,7 +35,7 @@ void BulletWorld::initialize() {
 		mCollisionConfiguration = new btDefaultCollisionConfiguration();
 
 		/// Default collision dispatcher.
-		mDispatcher = new	btCollisionDispatcher(mCollisionConfiguration);
+		mDispatcher = new btCollisionDispatcher(mCollisionConfiguration);
 
 		///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
 		mOverlappingPairCache = new btDbvtBroadphase();
@@ -55,5 +62,15 @@ void BulletWorld::finalize() {
 		delete mDispatcher;
 
 		delete mCollisionConfiguration;
+}
+
+void BulletWorld::addRigidBody (PhysicsRigidBody *body) {
+	mDynamicsWorld->addRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+}
+
+void BulletWorld::removeRigidBody (PhysicsRigidBody *body) {
+	mDynamicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+}
+
 }
 
