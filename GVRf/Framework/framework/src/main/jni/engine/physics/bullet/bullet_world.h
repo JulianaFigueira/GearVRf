@@ -25,12 +25,18 @@
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
-#include "physics_3dworld.h"
+#include "../physics3d/physics_3dworld.h"
 
+namespace gvr {
 class BulletWorld : public Physics3DWorld {
 public:
 	BulletWorld();
+
 	~BulletWorld();
+
+	void addRigidBody (PhysicsRigidBody *body);
+
+	void removeRigidBody (PhysicsRigidBody *body);
 
 private:
 	void initialize();
@@ -45,5 +51,6 @@ private: // Aux vars
 	btBroadphaseInterface* mOverlappingPairCache;
 	btSequentialImpulseConstraintSolver* mSolver;
 };
+}
 
 #endif /* BULLET_WORLD_H_ */

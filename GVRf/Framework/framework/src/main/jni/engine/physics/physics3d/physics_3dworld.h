@@ -20,11 +20,14 @@
 #ifndef PHYSICS_3DWORLD_H_
 #define PHYSICS_3DWORLD_H_
 
-#include "physics_world.h"
+#include "../physics_world.h"
+
+namespace gvr {
 
 class Physics3DWorld : public PhysicsWorld {
 public:
 
 };
+}
 
 #endif /* PHYSICS_3DWORLD_H_ */
