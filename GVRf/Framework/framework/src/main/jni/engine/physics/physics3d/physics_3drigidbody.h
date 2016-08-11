@@ -8,13 +8,15 @@
 #ifndef PHYSICS_3DRIGIDBODY_H_
 #define PHYSICS_3DRIGIDBODY_H_
 
-#include "physics_rigidbody.h"
+#include "../physics_rigidbody.h"
 
+namespace gvr {
 class Physics3DRigidBody : public PhysicsRigidBody {
 public:
-	class Physics3DRigidBodyDef : public PhysicsRigidBody::PhysicsRigidBodyDef {
-
-	};
+	Physics3DRigidBody(float mass, Collider *collider) :
+		PhysicsRigidBody(mass, collider) {
+	}
 };
+}
 
 #endif /* PHYSICS_3DRIGIDBODY_H_ */
