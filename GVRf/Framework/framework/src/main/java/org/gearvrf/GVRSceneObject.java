@@ -26,6 +26,7 @@ import java.util.concurrent.Future;
 
 import org.gearvrf.GVRMaterial.GVRShaderType;
 import org.gearvrf.GVRMaterial.GVRShaderType.Texture;
+import org.gearvrf.physics.GVRRigidBody;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
 import org.joml.Vector3f;
@@ -608,6 +609,10 @@ public class GVRSceneObject extends GVRHybridObject implements PrettyPrint, IScr
      */
     public void attachCollider(GVRCollider collider) {
         attachComponent(collider);
+    }
+
+    public void attachRigidBody(GVRRigidBody rigidBody) {
+        attachComponent(rigidBody);
     }
 
     /**
