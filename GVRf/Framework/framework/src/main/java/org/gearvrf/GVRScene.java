@@ -18,11 +18,6 @@ package org.gearvrf;
 import android.os.Environment;
 
 import org.gearvrf.GVRCameraRigBase.GVRCameraRigType;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.gearvrf.GVRRenderData.GVRRenderMaskBit;
 import org.gearvrf.debug.GVRConsole;
 import org.gearvrf.physics.GVRPhysicsWorld;
@@ -30,6 +25,14 @@ import org.gearvrf.physics.GVRRigidBody;
 import org.gearvrf.script.GVRScriptBehavior;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Contains a the hierarchy of visible objects, a camera and processes events.

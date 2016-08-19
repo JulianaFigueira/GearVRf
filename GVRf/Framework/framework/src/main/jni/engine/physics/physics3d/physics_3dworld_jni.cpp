@@ -58,7 +58,7 @@ JNIEXPORT void JNICALL
 	BulletWorld* world = reinterpret_cast<BulletWorld*>(jworld);
 	BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
 
-	world->addRigidBody(rigid_body);
+	world->removeRigidBody(rigid_body);
 }
 
 }
