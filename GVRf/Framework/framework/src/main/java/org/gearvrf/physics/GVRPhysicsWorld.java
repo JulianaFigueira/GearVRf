@@ -16,18 +16,24 @@ public class GVRPhysicsWorld extends GVRHybridObject {
     }
 
     public void addRigidBody(GVRRigidBody rigidBody) {
-        NativePhysics3DWorld.addRigidBody(getNative(), rigidBody.getNative());
+        NativePhysics3DWorld.addRigidBody(getNative(), rigidBody.getNative(), rigidBody.getTransform().getNative());
     }
 
     public void removeRigidBody(GVRRigidBody rigidBody) {
         NativePhysics3DWorld.removeRigidBody(getNative(), rigidBody.getNative());
+    }
+
+    public void step(float stepTime) {
+        NativePhysics3DWorld.step(getNative(), stepTime);
     }
 }
 
 class NativePhysics3DWorld {
     static native long ctor();
 
-    static native void addRigidBody(long jworld, long jrigid_body);
+    static native void addRigidBody(long jworld, long jrigid_body, long jtransform);
 
     static native void removeRigidBody(long jworld, long jrigid_body);
+
+    static native void step(long jworld, float jtime_step);
 }   

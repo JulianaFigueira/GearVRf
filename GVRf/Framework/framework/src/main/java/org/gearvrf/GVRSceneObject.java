@@ -426,7 +426,14 @@ public class GVRSceneObject extends GVRHybridObject implements PrettyPrint, IScr
      *         currently attached to the object, returns {@code null}.
      */
     public GVRTransform getTransform() {
-        return (GVRTransform) getComponent(GVRTransform.getComponentType());
+        GVRRigidBody rigidBody = (GVRRigidBody) getComponent(GVRRigidBody.getComponentType());
+        GVRTransform transform = (GVRTransform) getComponent(GVRTransform.getComponentType());
+
+        if( rigidBody != null){
+            rigidBody.updateTransform(transform);
+        }
+
+        return transform;
     }
 
     /**
