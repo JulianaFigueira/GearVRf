@@ -29,11 +29,15 @@ extern "C" {
 
     JNIEXPORT void JNICALL
         Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,
-        		jlong jworld, jlong jrigid_body);
+        		jlong jworld, jlong jrigid_body, jlong jtransform);
 
     JNIEXPORT void JNICALL
             Java_org_gearvrf_physics_NativePhysics3DWorld_removeRigidBody(JNIEnv * env, jobject obj,
             		jlong jworld, jlong jrigid_body);
+
+    JNIEXPORT void JNICALL
+                Java_org_gearvrf_physics_NativePhysics3DWorld_step(JNIEnv * env, jobject obj,
+                jlong jworld, jfloat jtime_step);
 }
 
 JNIEXPORT jlong JNICALL
@@ -43,10 +47,12 @@ JNIEXPORT jlong JNICALL
 
 JNIEXPORT void JNICALL
         Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,
-        		jlong jworld, jlong jrigid_body) {
+        		jlong jworld, jlong jrigid_body, jlong jtransform) {
 
 	BulletWorld* world = reinterpret_cast<BulletWorld*>(jworld);
 	BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+
+    rigid_body->setCenterOfMass(reinterpret_cast<Transform*> (jtransform));
 
 	world->addRigidBody(rigid_body);
 }
@@ -59,6 +65,16 @@ JNIEXPORT void JNICALL
 	BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
 
 	world->removeRigidBody(rigid_body);
+}
+
+JNIEXPORT void JNICALL
+                Java_org_gearvrf_physics_NativePhysics3DWorld_step(JNIEnv * env, jobject obj,
+                jlong jworld, jfloat jtime_step) {
+
+    BulletWorld* world = reinterpret_cast<BulletWorld*>(jworld);
+
+    world->step((float)jtime_step);
+
 }
 
 }

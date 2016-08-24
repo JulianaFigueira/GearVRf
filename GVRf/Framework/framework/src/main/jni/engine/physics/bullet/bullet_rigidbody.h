@@ -15,12 +15,16 @@
 namespace gvr {
 class BulletRigidBody : public Physics3DRigidBody {
 public:
-	BulletRigidBody(float mass, Collider *collider);
+	BulletRigidBody(float mass, Collider *collider, Transform* startTransform);
 	virtual ~BulletRigidBody();
 
 	btRigidBody* getRigidBody () const {
 		return mRigidBody;
 	}
+
+    void setCenterOfMass(const Transform* t);
+	void getRotation(float &w, float &x, float &y, float &z);
+	void getTranslation(float &x, float &y, float &z);
 
 private:
 	void initialize();

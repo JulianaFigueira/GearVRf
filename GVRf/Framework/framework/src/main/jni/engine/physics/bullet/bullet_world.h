@@ -35,8 +35,8 @@ public:
 	~BulletWorld();
 
 	void addRigidBody (PhysicsRigidBody *body);
-
 	void removeRigidBody (PhysicsRigidBody *body);
+	void step(float timeStep);
 
 private:
 	void initialize();
@@ -50,6 +50,7 @@ private: // Aux vars
 	btCollisionDispatcher* mDispatcher;
 	btBroadphaseInterface* mOverlappingPairCache;
 	btSequentialImpulseConstraintSolver* mSolver;
+
 };
 }
 

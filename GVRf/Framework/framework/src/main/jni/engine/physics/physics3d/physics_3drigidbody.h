@@ -13,8 +13,8 @@
 namespace gvr {
 class Physics3DRigidBody : public PhysicsRigidBody {
 public:
-	Physics3DRigidBody(float mass, Collider *collider) :
-		PhysicsRigidBody(mass, collider) {
+	Physics3DRigidBody(float mass, Collider *collider, Transform* startTransform) :
+		PhysicsRigidBody(mass, collider, startTransform) {
 	}
 };
 }
