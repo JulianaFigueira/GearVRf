@@ -46,9 +46,22 @@ void BulletWorld::initialize() {
 		mDynamicsWorld = new btDiscreteDynamicsWorld(mDispatcher, mOverlappingPairCache, mSolver, mCollisionConfiguration);
 
 		mDynamicsWorld->setGravity(btVector3(0, -10, 0));
+
 }
 
 void BulletWorld::finalize() {
+
+    //remove the rigidbodies from the dynamics world and delete them
+        for (int i=mDynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+        {
+            btCollisionObject* obj = mDynamicsWorld->getCollisionObjectArray()[i];
+            if (obj)
+            {
+                mDynamicsWorld->removeCollisionObject( obj );
+                delete obj;
+            }
+        }
+
 		//delete dynamics world
 		delete mDynamicsWorld;
 
@@ -70,6 +83,10 @@ void BulletWorld::addRigidBody (PhysicsRigidBody *body) {
 
 void BulletWorld::removeRigidBody (PhysicsRigidBody *body) {
 	mDynamicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+}
+
+void BulletWorld::step(float timeStep){
+    mDynamicsWorld->stepSimulation(timeStep);
 }
 
 }

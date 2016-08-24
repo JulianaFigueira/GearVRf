@@ -30,6 +30,8 @@ public:
 	virtual void addRigidBody (PhysicsRigidBody *body) = 0;
 
 	virtual void removeRigidBody (PhysicsRigidBody *body) = 0;
+
+	virtual void step (float timeStep) = 0;
 };
 }
 
