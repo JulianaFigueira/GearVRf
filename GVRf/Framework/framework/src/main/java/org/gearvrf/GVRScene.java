@@ -16,14 +16,13 @@
 package org.gearvrf;
 
 import android.os.Environment;
-
 import org.gearvrf.GVRCameraRigBase.GVRCameraRigType;
 import org.gearvrf.GVRRenderData.GVRRenderMaskBit;
 import org.gearvrf.debug.GVRConsole;
+import org.gearvrf.physics.GVRPhysicsWorld;
 import org.gearvrf.script.GVRScriptBehavior;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
-import org.gearvrf.script.GVRScriptBehavior;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,6 +67,7 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
     private GVRMaterial mShadowMaterial = null;
     private boolean mShadowMapDirty = true;
     private GVRSceneObject mSceneRoot;
+
     /**
      * Constructs a scene with a camera rig holding left & right cameras in it.
      * 
