@@ -25,6 +25,7 @@ public:
     void setCenterOfMass(const Transform* t);
 	void getRotation(float &w, float &x, float &y, float &z);
 	void getTranslation(float &x, float &y, float &z);
+    Transform* updateTransform();
 
 private:
 	void initialize();
