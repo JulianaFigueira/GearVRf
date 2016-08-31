@@ -25,13 +25,11 @@
 namespace gvr {
 class PhysicsWorld {
 public:
-	virtual ~PhysicsWorld() = 0;
+	static void addRigidBody (PhysicsRigidBody *body);
 
-	virtual void addRigidBody (PhysicsRigidBody *body) = 0;
+	static void removeRigidBody (PhysicsRigidBody *body);
 
-	virtual void removeRigidBody (PhysicsRigidBody *body) = 0;
-
-	virtual void step (float timeStep) = 0;
+	static void step (float timeStep);
 };
 }
 

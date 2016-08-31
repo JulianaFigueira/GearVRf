@@ -32,6 +32,14 @@ btTransform convertTransform2btTransform(const Transform* t){
     return transform;
 }
 
+void convertBtTransform2Transform( btTransform bulletTransform, Transform* transform){
+    btVector3 pos = bulletTransform.getOrigin();
+    btQuaternion rot = bulletTransform.getRotation();
+
+    transform->set_position(pos.getX(),pos.getY(), pos.getZ());
+    transform->set_rotation(rot.getW(),rot.getX(), rot.getY(), rot.getZ());
+}
+
 BulletRigidBody::BulletRigidBody(float mass, Collider *collider, Transform* startTransform)
 	: Physics3DRigidBody(mass, collider, startTransform) {
 
@@ -56,7 +64,7 @@ void BulletRigidBody::initialize() {
 
 	mRigidBody = new btRigidBody(btScalar(getMass()), myMotionState, collisionShape, localInertia);
 
-	LOGD("INITIALIZE x: %f y: %f z: %f mass: %f", getTransform()->position_x(), getTransform()->position_y(), getTransform()->position_z(), getMass());
+	//LOGD("INITIALIZE x: %f y: %f z: %f mass: %f", getTransform()->position_x(), getTransform()->position_y(), getTransform()->position_z(), getMass());
 }
 
 void BulletRigidBody::finalize() {
@@ -104,10 +112,23 @@ void BulletRigidBody::getTranslation(float &x, float &y, float &z){
      z = pos.getZ();
      y = pos.getY();
      x = pos.getX();
-     LOGD("GET POS x: %f y: %f z: %f mass: %f", getTransform()->position_x(), getTransform()->position_y(), getTransform()->position_z(), getMass());
+     //LOGD("GET POS x: %f y: %f z: %f mass: %f", getTransform()->position_x(), getTransform()->position_y(), getTransform()->position_z(), getMass());
  }
 
 void BulletRigidBody::setCenterOfMass(const Transform* t){
     mRigidBody->setCenterOfMassTransform(convertTransform2btTransform(t));
 }
+
+Transform* BulletRigidBody::updateTransform(){
+     btTransform trans;
+     if (mRigidBody && mRigidBody->getMotionState())
+     {
+         mRigidBody->getMotionState()->getWorldTransform(trans);
+     } else
+     {
+         trans = mRigidBody->getCenterOfMassTransform();
+     }
+     convertBtTransform2Transform(trans, getTransform());
+     return getTransform();
+ }
 }

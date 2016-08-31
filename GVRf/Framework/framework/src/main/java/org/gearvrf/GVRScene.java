@@ -16,12 +16,10 @@
 package org.gearvrf;
 
 import android.os.Environment;
-
 import org.gearvrf.GVRCameraRigBase.GVRCameraRigType;
 import org.gearvrf.GVRRenderData.GVRRenderMaskBit;
 import org.gearvrf.debug.GVRConsole;
 import org.gearvrf.physics.GVRPhysicsWorld;
-import org.gearvrf.physics.GVRRigidBody;
 import org.gearvrf.script.GVRScriptBehavior;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
@@ -69,7 +67,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
     private GVRMaterial mShadowMaterial = null;
     private boolean mShadowMapDirty = true;
     private GVRSceneObject mSceneRoot;
-    private GVRPhysicsWorld mPhysicsWorld = null;
 
     /**
      * Constructs a scene with a camera rig holding left & right cameras in it.
@@ -437,17 +434,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
         }
     }
 
-    private void initPhysicsWorld() {
-        if (mPhysicsWorld == null) {
-            return;
-        }
-
-        ArrayList<GVRRigidBody> rigidBodies = mSceneRoot.getAllComponents(GVRRigidBody.getComponentType());
-        for (GVRRigidBody rigidBody : rigidBodies) {
-            mPhysicsWorld.addRigidBody(rigidBody);
-        }
-    }
-
     /**
      * Bind the correct vertex and fragment shaders on the given hierarchy.
      * This function sets the shader template for all the GVRRenderData components
@@ -616,16 +602,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
         }
     }
 
-    public void setPhysicsWorld(GVRPhysicsWorld world) {
-        // FIXME: The scene should be created already with the physics
-        // if it should have one. This "set" is just a workaround for it.
-        mPhysicsWorld = world;
-    }
-
-    public GVRPhysicsWorld getPhysicsWorld() {
-        return mPhysicsWorld;
-    }
-
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -660,7 +636,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
         @Override
         public void onAfterInit() {
             bindShaders();
-            initPhysicsWorld();
             recursivelySendSimpleEvent(mSceneRoot, "onAfterInit");
         }
 
