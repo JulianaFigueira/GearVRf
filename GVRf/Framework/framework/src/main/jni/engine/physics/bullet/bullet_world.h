@@ -30,22 +30,21 @@
 namespace gvr {
 class BulletWorld : public Physics3DWorld {
 public:
-	BulletWorld();
-
 	~BulletWorld();
 
-	void addRigidBody (PhysicsRigidBody *body);
-	void removeRigidBody (PhysicsRigidBody *body);
-	void step(float timeStep);
+	static void addRigidBody (PhysicsRigidBody *body);
+	static void removeRigidBody (PhysicsRigidBody *body);
+	static void step(float timeStep);
 
 private:
+	BulletWorld();
 	void initialize();
 	void finalize();
 
+	static BulletWorld* getInstance();
+
 private:
 	btDynamicsWorld* mDynamicsWorld;
-
-private: // Aux vars
 	btDefaultCollisionConfiguration* mCollisionConfiguration;
 	btCollisionDispatcher* mDispatcher;
 	btBroadphaseInterface* mOverlappingPairCache;

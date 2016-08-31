@@ -18,7 +18,7 @@ class PhysicsRigidBody : public Component {
 public:
 	PhysicsRigidBody(float mass, Collider *collider, Transform* startTransform) :
 		Component(PhysicsRigidBody::getComponentType()),
-		mMass(mass), mCollider(collider), mStartTransform(startTransform)  {
+		mMass(mass), mCollider(collider), mTransform(startTransform)  {
 	}
 
 	static long long getComponentType() {
@@ -33,12 +33,12 @@ public:
 		return mMass;
 	}
 
-    Transform * getTransform() {
-        return mStartTransform;
-    }
-
 	void setMass(float mass) {
     	mMass = mass;
+    }
+
+	Transform* getTransform(){
+	    return mTransform;
     }
 
     virtual void setCenterOfMass(const Transform* t) = 0;
@@ -46,9 +46,9 @@ public:
     virtual void getTranslation(float &x, float &y, float &z) = 0;
 
 private:
-	Collider *mCollider;
 	float mMass;
-	Transform *mStartTransform;
+	Collider *mCollider;
+	Transform *mTransform;
 };
 }
 

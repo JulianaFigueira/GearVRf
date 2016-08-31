@@ -1,39 +1,45 @@
 package org.gearvrf.physics;
 
-import java.util.List;
 
-import org.gearvrf.GVRContext;
-import org.gearvrf.GVRHybridObject;
+import java.util.LinkedList;
 
-public class GVRPhysicsWorld extends GVRHybridObject {
-    public GVRPhysicsWorld(GVRContext gvrContext,
-            List<NativeCleanupHandler> cleanupHandlers) {
-        super(gvrContext, NativePhysics3DWorld.ctor(), cleanupHandlers);
+public final class GVRPhysicsWorld{
+    private static float stepLength = 1.0f/60.0f;
+    private static LinkedList<GVRRigidBody> rigidBodies = new LinkedList<GVRRigidBody>();
+
+    public static void setStepLength(float stepLen)
+    {
+        stepLength = stepLen;
     }
 
-    public GVRPhysicsWorld(GVRContext gvrContext) {
-        super(gvrContext, NativePhysics3DWorld.ctor());
+    public static void addRigidBody(GVRRigidBody rigidBody) {
+        NativePhysics3DWorld.addRigidBody(rigidBody.getNative());
+        rigidBodies.add(rigidBody);
     }
 
-    public void addRigidBody(GVRRigidBody rigidBody) {
-        NativePhysics3DWorld.addRigidBody(getNative(), rigidBody.getNative(), rigidBody.getTransform().getNative());
+    public static void removeRigidBody(GVRRigidBody rigidBody) {
+        NativePhysics3DWorld.removeRigidBody(rigidBody.getNative());
+        rigidBodies.remove(rigidBody);
     }
 
-    public void removeRigidBody(GVRRigidBody rigidBody) {
-        NativePhysics3DWorld.removeRigidBody(getNative(), rigidBody.getNative());
+    public static void step() {
+        NativePhysics3DWorld.step(stepLength);
     }
 
-    public void step(float stepTime) {
-        NativePhysics3DWorld.step(getNative(), stepTime);
+    public static void step(float stepLength) {
+        setStepLength(stepLength);
+        step();
+
+        for(GVRRigidBody body : rigidBodies){
+            body.updateTransform(body.getOwnerObject().getTransform());
+        }
     }
 }
 
 class NativePhysics3DWorld {
-    static native long ctor();
+    static native void addRigidBody(long jrigid_body);
 
-    static native void addRigidBody(long jworld, long jrigid_body, long jtransform);
+    static native void removeRigidBody(long jrigid_body);
 
-    static native void removeRigidBody(long jworld, long jrigid_body);
-
-    static native void step(long jworld, float jtime_step);
+    static native void step(float jtime_step);
 }   

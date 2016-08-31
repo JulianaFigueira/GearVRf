@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.gearvrf.GVRCollider;
 import org.gearvrf.GVRComponent;
+import org.gearvrf.GVRScene;
+import org.gearvrf.GVRSceneObject;
 import org.gearvrf.GVRTransform;
 import org.gearvrf.GVRContext;
 
@@ -41,16 +43,17 @@ public class GVRRigidBody extends GVRComponent {
      * native values from bullet.
      */
     public void updateTransform(GVRTransform transform) {
-        float[] trans = new float[7];
-        trans = Native3DRigidBody.getCollisionTransform(getNative());
+        Native3DRigidBody.updateTransform(getNative(), transform.getNative());
+    }
 
-        if( trans[0] == 0.0f && trans[1] == 0.0f && trans[2] == 0.0f && trans[3] == 0.0f && trans[4] == 0.0f && trans[5] == 0.0f && trans[6] == 0.0f)
-            throw new RuntimeException("NO VALUESSSSSSS!!!!!!!! \n\n");
+    @Override
+    public void onAttach(GVRSceneObject newOwner) {
+        GVRPhysicsWorld.addRigidBody(this);
+    }
 
-        transform.setRotation(trans[0], trans[1],trans[2], trans[3]);
-        transform.setPosition(trans[4],trans[5],trans[6]);
-
-
+    @Override
+    public void onDetach(GVRSceneObject oldOwner) {
+        GVRPhysicsWorld.removeRigidBody(this);
     }
 
 }
@@ -62,5 +65,5 @@ class Native3DRigidBody {
 
     static native float getMass(long jrigid_body);
 
-    static native float[] getCollisionTransform(long jrigid_body);
+    static native long updateTransform(long jrigid_body, long jtransform);
 }

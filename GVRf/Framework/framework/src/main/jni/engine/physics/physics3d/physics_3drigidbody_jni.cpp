@@ -13,7 +13,8 @@
 namespace gvr {
 extern "C" {
 	JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass, jlong jcollider, jlong jtransform);
+    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass,
+                jlong jcollider, jlong jtransform);
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DRigidBody_getComponentType(JNIEnv * env, jobject obj);
@@ -26,14 +27,14 @@ extern "C" {
         Java_org_gearvrf_physics_Native3DRigidBody_setMass(JNIEnv * env, jobject obj,
         		jlong jrigid_body, jfloat mass);
 
-    JNIEXPORT jfloatArray JNICALL
-        Java_org_gearvrf_physics_Native3DRigidBody_getCollisionTransform(JNIEnv * env, jobject obj,
-        		jlong jrigid_body);
+    JNIEXPORT void JNICALL
+        Java_org_gearvrf_physics_Native3DRigidBody_updateTransform(JNIEnv * env, jobject obj,
+        		jlong jrigid_body, jlong jtransform);
 }
 
 JNIEXPORT jlong JNICALL
-Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass, jlong jcollider
-                                                , jlong jtransform)
+Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass,
+               jlong jcollider, jlong jtransform)
 {
 	Collider* collider = reinterpret_cast<Collider*>(jcollider);
     Transform* transform = reinterpret_cast<Transform*>(jtransform);
@@ -63,25 +64,17 @@ JNIEXPORT void JNICALL
 	rigid_body->setMass(mass);
 }
 
-JNIEXPORT jfloatArray JNICALL
-        Java_org_gearvrf_physics_Native3DRigidBody_getCollisionTransform(JNIEnv * env, jobject obj,
-        		jlong jrigid_body){
+JNIEXPORT void JNICALL
+        Java_org_gearvrf_physics_Native3DRigidBody_updateTransform(JNIEnv * env, jobject obj,
+        		jlong jrigid_body, jlong jtransform){
 
     BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+    Transform* outTransform = reinterpret_cast<Transform*>(jtransform);
 
-    jfloatArray result;
-     result = env->NewFloatArray(7);
-     if (result == NULL) {
-         return NULL; /* out of memory error thrown */
-     }
+    Transform* transform = rigid_body->updateTransform();
 
-    jfloat t[7];
-    rigid_body->getRotation(t[0], t[1], t[2], t[3]);
-    rigid_body->getTranslation(t[4], t[5], t[6]);
-
-    env->SetFloatArrayRegion(result, 0, 7, t);
-    return result;
+    outTransform->set_position(transform->position_x(), transform->position_y(), transform->position_z());
+    outTransform->set_rotation(transform->rotation_w(), transform->rotation_x(), transform->rotation_y(),
+                                                                             transform->rotation_z());
 }
-
-
 }
