@@ -26,7 +26,6 @@ import java.util.concurrent.Future;
 
 import org.gearvrf.GVRMaterial.GVRShaderType;
 import org.gearvrf.GVRMaterial.GVRShaderType.Texture;
-import org.gearvrf.physics.GVRRigidBody;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
 import org.joml.Vector3f;
@@ -426,12 +425,7 @@ public class GVRSceneObject extends GVRHybridObject implements PrettyPrint, IScr
      *         currently attached to the object, returns {@code null}.
      */
     public GVRTransform getTransform() {
-        GVRRigidBody rigidBody = (GVRRigidBody) getComponent(GVRRigidBody.getComponentType());
         GVRTransform transform = (GVRTransform) getComponent(GVRTransform.getComponentType());
-
-        if( rigidBody != null){
-            rigidBody.updateTransform(transform);
-        }
 
         return transform;
     }
@@ -616,10 +610,6 @@ public class GVRSceneObject extends GVRHybridObject implements PrettyPrint, IScr
      */
     public void attachCollider(GVRCollider collider) {
         attachComponent(collider);
-    }
-
-    public void attachRigidBody(GVRRigidBody rigidBody) {
-        attachComponent(rigidBody);
     }
 
     /**

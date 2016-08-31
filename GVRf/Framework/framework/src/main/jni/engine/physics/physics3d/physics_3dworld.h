@@ -26,7 +26,7 @@ namespace gvr {
 
 class Physics3DWorld : public PhysicsWorld {
 public:
-
+    ~Physics3DWorld() { }
 };
 }
 

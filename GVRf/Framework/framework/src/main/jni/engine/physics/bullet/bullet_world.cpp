@@ -22,10 +22,6 @@ BulletWorld::BulletWorld() {
 	initialize();
 }
 
-PhysicsWorld::~PhysicsWorld() {
-
-}
-
 BulletWorld::~BulletWorld() {
 	finalize();
 }
@@ -77,16 +73,21 @@ void BulletWorld::finalize() {
 		delete mCollisionConfiguration;
 }
 
+BulletWorld* BulletWorld::getInstance() {
+    static BulletWorld bulletWorld;
+    return &bulletWorld;
+}
+
 void BulletWorld::addRigidBody (PhysicsRigidBody *body) {
-	mDynamicsWorld->addRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+	BulletWorld::getInstance()->mDynamicsWorld->addRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
 }
 
 void BulletWorld::removeRigidBody (PhysicsRigidBody *body) {
-	mDynamicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+	BulletWorld::getInstance()->mDynamicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
 }
 
 void BulletWorld::step(float timeStep){
-    mDynamicsWorld->stepSimulation(timeStep);
+    BulletWorld::getInstance()->mDynamicsWorld->stepSimulation(timeStep);
 }
 
 }
