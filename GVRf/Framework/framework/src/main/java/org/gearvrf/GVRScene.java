@@ -16,17 +16,10 @@
 package org.gearvrf;
 
 import android.os.Environment;
-<<<<<<< 60d08406dfd61bd4434d5311afba901930eb3997
 
 import org.gearvrf.GVRCameraRig.GVRCameraRigType;
 import org.gearvrf.GVRRenderData.GVRRenderMaskBit;
 import org.gearvrf.debug.GVRConsole;
-=======
-import org.gearvrf.GVRCameraRigBase.GVRCameraRigType;
-import org.gearvrf.GVRRenderData.GVRRenderMaskBit;
-import org.gearvrf.debug.GVRConsole;
-import org.gearvrf.physics.GVRPhysicsWorld;
->>>>>>> Physics World singleton
 import org.gearvrf.script.GVRScriptBehavior;
 import org.gearvrf.script.IScriptable;
 import org.gearvrf.utility.Log;
@@ -74,10 +67,7 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
     private GVRMaterial mShadowMaterial = null;
     private boolean mShadowMapDirty = true;
     private GVRSceneObject mSceneRoot;
-<<<<<<< 60d08406dfd61bd4434d5311afba901930eb3997
-=======
 
->>>>>>> Physics World singleton
     /**
      * Constructs a scene with a camera rig holding left & right cameras in it.
      * 

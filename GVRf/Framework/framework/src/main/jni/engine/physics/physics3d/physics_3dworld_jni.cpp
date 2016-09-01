@@ -51,12 +51,7 @@ JNIEXPORT void JNICALL
         		jlong jworld, jlong jrigid_body) {
 
 	BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
-<<<<<<< 60d08406dfd61bd4434d5311afba901930eb3997
-
-	world->addRigidBody(rigid_body);
-=======
 	BulletWorld::removeRigidBody(rigid_body);
->>>>>>> Physics World singleton
 }
 
 JNIEXPORT void JNICALL
