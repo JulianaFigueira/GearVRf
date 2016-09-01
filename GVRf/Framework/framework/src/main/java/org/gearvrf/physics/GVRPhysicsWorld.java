@@ -24,15 +24,15 @@ public final class GVRPhysicsWorld{
 
     public static void step() {
         NativePhysics3DWorld.step(stepLength);
+
+        for(GVRRigidBody body : rigidBodies){
+            body.updateTransform(body.getOwnerObject().getTransform());
+        }
     }
 
     public static void step(float stepLength) {
         setStepLength(stepLength);
         step();
-
-        for(GVRRigidBody body : rigidBodies){
-            body.updateTransform(body.getOwnerObject().getTransform());
-        }
     }
 }
 
