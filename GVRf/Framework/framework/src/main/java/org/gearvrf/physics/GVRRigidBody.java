@@ -1,13 +1,12 @@
 package org.gearvrf.physics;
 
-import java.util.List;
-
 import org.gearvrf.GVRCollider;
 import org.gearvrf.GVRComponent;
-import org.gearvrf.GVRScene;
+import org.gearvrf.GVRContext;
 import org.gearvrf.GVRSceneObject;
 import org.gearvrf.GVRTransform;
-import org.gearvrf.GVRContext;
+
+import java.util.List;
 
 public class GVRRigidBody extends GVRComponent {
     private final GVRCollider mCollider;

@@ -15,7 +15,7 @@
 
 #include "bullet_world.h"
 #include "bullet_rigidbody.h"
-
+#include "../../util/gvr_log.h"
 namespace gvr {
 
 BulletWorld::BulletWorld() {
