@@ -16,6 +16,10 @@
 #include "bullet_world.h"
 #include "bullet_rigidbody.h"
 #include "../../util/gvr_log.h"
+#include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
+#include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
+#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+
 namespace gvr {
 
 BulletWorld::BulletWorld() {
@@ -39,27 +43,26 @@ void BulletWorld::initialize() {
 		///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 		mSolver = new btSequentialImpulseConstraintSolver;
 
-		mDynamicsWorld = new btDiscreteDynamicsWorld(mDispatcher, mOverlappingPairCache, mSolver, mCollisionConfiguration);
+		mPhysicsWorld = new btDiscreteDynamicsWorld(mDispatcher, mOverlappingPairCache, mSolver, mCollisionConfiguration);
 
-		mDynamicsWorld->setGravity(btVector3(0, -10, 0));
-
+		mPhysicsWorld->setGravity(btVector3(0, -10, 0));
 }
 
 void BulletWorld::finalize() {
 
     //remove the rigidbodies from the dynamics world and delete them
-        for (int i=mDynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
+        for (int i=mPhysicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
         {
-            btCollisionObject* obj = mDynamicsWorld->getCollisionObjectArray()[i];
+            btCollisionObject* obj = mPhysicsWorld->getCollisionObjectArray()[i];
             if (obj)
             {
-                mDynamicsWorld->removeCollisionObject( obj );
+                mPhysicsWorld->removeCollisionObject( obj );
                 delete obj;
             }
         }
 
 		//delete dynamics world
-		delete mDynamicsWorld;
+		delete mPhysicsWorld;
 
 		//delete solver
 		delete mSolver;
@@ -71,24 +74,98 @@ void BulletWorld::finalize() {
 		delete mDispatcher;
 
 		delete mCollisionConfiguration;
-}
 
-BulletWorld* BulletWorld::getInstance() {
-    static BulletWorld bulletWorld;
-    return &bulletWorld;
 }
 
 void BulletWorld::addRigidBody (PhysicsRigidBody *body) {
-	BulletWorld::getInstance()->mDynamicsWorld->addRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+	getInstance()->mPhysicsWorld->addRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
 }
 
 void BulletWorld::removeRigidBody (PhysicsRigidBody *body) {
-	BulletWorld::getInstance()->mDynamicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
+	getInstance()->mPhysicsWorld->removeRigidBody((static_cast<BulletRigidBody*>(body))->getRigidBody());
 }
 
 void BulletWorld::step(float timeStep){
-    BulletWorld::getInstance()->mDynamicsWorld->stepSimulation(timeStep);
+    getInstance()->mPhysicsWorld->stepSimulation(timeStep);
 }
 
+BulletWorld* BulletWorld::getInstance()
+{
+    static BulletWorld instance;
+    return &instance;
+}
+ /*
+//FROM BULLET
+void Bullet2NearCallback(btBroadphasePair& collisionPair, btCollisionDispatcher& dispatcher,
+                                                               const btDispatcherInfo& dispatchInfo)
+{
+    btCollisionObject* colObj0 = (btCollisionObject*)collisionPair.m_pProxy0->m_clientObject;
+    btCollisionObject* colObj1 = (btCollisionObject*)collisionPair.m_pProxy1->m_clientObject;
+    if(gTmpFilter)
+    {
+        gTmpFilter(BulletWorld::getInstance()->mPhysicsWorld, gUserData,colObj0,colObj1);
+        gNearCallbackCount++;
+    }
+}
+
+void BulletWorld::collideWorld(void* filter, void* userData)
+//void BulletWorld::collideWorld(PhysicsNearCallback* filter, void* userData)
+{
+    gTmpFilter = filter;
+    gNearCallbackCount = 0;
+    gUserData = userData;
+    getInstance()->mDispatcher->setNearCallback(Bullet2NearCallback);
+    getInstance()->mPhysicsWorld->performDiscreteCollisionDetection();
+    gTmpFilter = 0;
+}
+
+struct   Bullet2ContactResultCallback : public btWorld::ContactResultCallback
+{
+    int m_numContacts;
+    lwContactPoint* m_pointsOut;
+    int m_pointCapacity;
+
+    Bullet2ContactResultCallback(lwContactPoint* pointsOut, int pointCapacity) :
+	m_numContacts(0),
+		m_pointsOut(pointsOut),
+		m_pointCapacity(pointCapacity)
+    {
+    }
+    virtual   btScalar   addSingleResult(btManifoldPoint& cp,   const btCollisionObjectWrapper* colObj0Wrap,int partId0,int index0,const btCollisionObjectWrapper* colObj1Wrap,int partId1,int index1)
+    {
+        if (m_numContacts<m_pointCapacity)
+        {
+            lwContactPoint& ptOut = m_pointsOut[m_numContacts];
+            ptOut.m_distance = cp.m_distance1;
+            ptOut.m_normalOnB[0] = cp.m_normalWorldOnB.getX();
+            ptOut.m_normalOnB[1] = cp.m_normalWorldOnB.getY();
+            ptOut.m_normalOnB[2] = cp.m_normalWorldOnB.getZ();
+            ptOut.m_ptOnAWorld[0] = cp.m_positionWorldOnA[0];
+            ptOut.m_ptOnAWorld[1] = cp.m_positionWorldOnA[1];
+            ptOut.m_ptOnAWorld[2] = cp.m_positionWorldOnA[2];
+            ptOut.m_ptOnBWorld[0] = cp.m_positionWorldOnB[0];
+            ptOut.m_ptOnBWorld[1] = cp.m_positionWorldOnB[1];
+            ptOut.m_ptOnBWorld[2] = cp.m_positionWorldOnB[2];
+            m_numContacts++;
+        }
+
+        return 1.f;
+    }
+};
+
+int BulletWorld::collide(PhysicsRigidBody* colObjA, PhysicsRigidBody* colObjB,
+                                                  lwContactPoint* pointsOut, int pointCapacity
+{
+    btWorld* World = BulletWorld::getInstance()->mPhysicsWorld;
+    if (World && colObjA && colObjB)
+    {
+        Bullet2ContactResultCallback cb(pointsOut,pointCapacity);
+        getInstance()->mPhysicsWorld->contactPairTest((btCollisionObject*)colObjA->getRigidBody(),
+                                                      (btCollisionObject*)colObjB->getRigidBody(),cb);
+        return cb.m_numContacts;
+    }
+    return 0;
+}
+*/
 }
 

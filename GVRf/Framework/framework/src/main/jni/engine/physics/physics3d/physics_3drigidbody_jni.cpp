@@ -13,32 +13,29 @@
 namespace gvr {
 extern "C" {
 	JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass,
-                jlong jcollider, jlong jtransform);
+    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jlong jscene_object);
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DRigidBody_getComponentType(JNIEnv * env, jobject obj);
 
     JNIEXPORT jfloat JNICALL
-        Java_org_gearvrf_physics_Native3DRigidBody_getMass(JNIEnv * env, jobject obj,
+    Java_org_gearvrf_physics_Native3DRigidBody_getMass(JNIEnv * env, jobject obj,
         		jlong jrigid_body);
 
     JNIEXPORT void JNICALL
-        Java_org_gearvrf_physics_Native3DRigidBody_setMass(JNIEnv * env, jobject obj,
+    Java_org_gearvrf_physics_Native3DRigidBody_setMass(JNIEnv * env, jobject obj,
         		jlong jrigid_body, jfloat mass);
 
     JNIEXPORT void JNICALL
-        Java_org_gearvrf_physics_Native3DRigidBody_updateTransform(JNIEnv * env, jobject obj,
+    Java_org_gearvrf_physics_Native3DRigidBody_updateTransform(JNIEnv * env, jobject obj,
         		jlong jrigid_body, jlong jtransform);
 }
 
 JNIEXPORT jlong JNICALL
-Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jfloat jmass,
-               jlong jcollider, jlong jtransform)
+Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jlong jscene_object)
 {
-	Collider* collider = reinterpret_cast<Collider*>(jcollider);
-    Transform* transform = reinterpret_cast<Transform*>(jtransform);
-    return reinterpret_cast<jlong>(new BulletRigidBody(jmass, collider, transform));
+    SceneObject* sceneObject = reinterpret_cast<SceneObject*>(jscene_object);
+    return reinterpret_cast<jlong>(new BulletRigidBody(sceneObject));
 }
 
 JNIEXPORT jlong JNICALL
