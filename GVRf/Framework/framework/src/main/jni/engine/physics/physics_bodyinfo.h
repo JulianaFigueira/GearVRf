@@ -17,34 +17,28 @@
  * Represents a physics 2D or 3D world
  ***************************************************************************/
 
-#ifndef PHYSICS_WORLD_H_
-#define PHYSICS_WORLD_H_
+#ifndef PHYSICS_BODYINFO_H_
+#define PHYSICS_BODYINFO_H_
 
-#include "physics_rigidbody.h"
-#include "../objects/hybrid_object.h"
+#include "objects/scene_object.h"
+
 namespace gvr {
 
-struct lwContactPoint
-	{
-		float m_ptOnAWorld[3];
-		float m_ptOnBWorld[3];
-		float m_normalOnB[3];
-		float  m_distance;
-	};
-
-class PhysicsWorld : HybridObject {
+class PhysicsBodyInfo : public Component{
 public:
 
-	static void addRigidBody (PhysicsRigidBody *body);
+    PhysicsBodyInfo() : Component(PhysicsBodyInfo::getComponentType())
+    {
+    }
 
-	static void removeRigidBody (PhysicsRigidBody *body);
+    static long long getComponentType()
+    {
+	    return (long long) &getComponentType;
+	}
 
-	static void step (float timeStep);
-
-    //static int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB, lwContactPoint* pointsOut, int pointCapacity);
-
-    //static void collideWorld( void* filter, void* userData); //static void collideWorld( PhysicsNearCallback* filter, void* userData);
+    virtual float getMass() = 0;
+    virtual void setMass(float mass) = 0;
 };
 }
 
-#endif /* PHYSICS_WORLD_H_ */
+#endif /* PHYSICS_BODYINFO_H_ */

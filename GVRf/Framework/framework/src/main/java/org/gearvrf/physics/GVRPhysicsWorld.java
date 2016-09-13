@@ -1,42 +1,71 @@
 package org.gearvrf.physics;
 
+import org.gearvrf.GVRContext;
+import org.gearvrf.GVRHybridObject;
+import org.gearvrf.GVRSceneObject;
 
-import java.util.LinkedList;
+import java.util.List;
 
-public final class GVRPhysicsWorld{
+public final class GVRPhysicsWorld extends GVRHybridObject {
     private static float stepLength = 1.0f/60.0f;
-    private static LinkedList<GVRRigidBody> rigidBodies = new LinkedList<GVRRigidBody>();
 
-    public static void setStepLength(float stepLen)
+    public GVRPhysicsWorld(GVRContext gvrContext) {
+        super(gvrContext, NativePhysics3DWorld.ctor());
+    }
+
+    public GVRPhysicsWorld(GVRContext gvrContext, List<NativeCleanupHandler> cleanupHandlers) {
+        super(gvrContext, NativePhysics3DWorld.ctor(), cleanupHandlers);
+    }
+
+    private void addRigidBody(GVRRigidBody rigidBody) {
+        NativePhysics3DWorld.addRigidBody(rigidBody.getNative());
+    }
+
+    private void removeRigidBody(GVRRigidBody rigidBody) {
+        NativePhysics3DWorld.removeRigidBody(rigidBody.getNative());
+    }
+
+    public void addPhysicsObject(GVRSceneObject sceneObject)
+    {
+        GVRPhysicsBodyInfo body = (GVRPhysicsBodyInfo) sceneObject.getComponent(GVRPhysicsBodyInfo.getComponentType());
+        if(body == null) {
+            //TODO: if collider, create ghost body
+        }else
+        {
+            this.addRigidBody(new GVRRigidBody(this.getGVRContext(),sceneObject));
+        }
+    }
+
+    public void removePhysicsObject(GVRSceneObject sceneObject)
+    {
+        GVRPhysicsBodyInfo body = (GVRPhysicsBodyInfo) sceneObject.getComponent(GVRPhysicsBodyInfo.getComponentType());
+        if(body == null) {
+            //TODO: if collider, remove ghost body
+        }else
+        {
+            this.removeRigidBody(new GVRRigidBody(this.getGVRContext(), sceneObject));
+        }
+    }
+
+    public void setStepLength(float stepLen)
     {
         stepLength = stepLen;
     }
 
-    public static void addRigidBody(GVRRigidBody rigidBody) {
-        NativePhysics3DWorld.addRigidBody(rigidBody.getNative());
-        rigidBodies.add(rigidBody);
-    }
-
-    public static void removeRigidBody(GVRRigidBody rigidBody) {
-        NativePhysics3DWorld.removeRigidBody(rigidBody.getNative());
-        rigidBodies.remove(rigidBody);
-    }
-
-    public static void step() {
+    public void step() {
         NativePhysics3DWorld.step(stepLength);
-
-        for(GVRRigidBody body : rigidBodies){
-            body.updateTransform(body.getOwnerObject().getTransform());
-        }
     }
 
-    public static void step(float stepLength) {
+    public void step(float stepLength) {
         setStepLength(stepLength);
         step();
     }
+
 }
 
 class NativePhysics3DWorld {
+    static native long ctor();
+
     static native void addRigidBody(long jrigid_body);
 
     static native void removeRigidBody(long jrigid_body);

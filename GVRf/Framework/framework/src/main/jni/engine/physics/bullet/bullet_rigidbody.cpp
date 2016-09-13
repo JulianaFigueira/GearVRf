@@ -6,6 +6,7 @@
  */
 
 #include "bullet_rigidbody.h"
+#include "bullet_gvr_utils.h"
 #include "objects/components/sphere_collider.h"
 #include "util/gvr_log.h"
 #include <BulletCollision/CollisionShapes/btSphereShape.h>
@@ -14,35 +15,9 @@
 
 namespace gvr {
 
-btCollisionShape *convertCollider2CollisionShape(Collider *collider) {
-	SphereCollider *sphereCollider = static_cast<SphereCollider*>(collider);
 
-	btCollisionShape *collisionShape = new btSphereShape(btScalar(sphereCollider->get_radius()));
-
-	return collisionShape;
-}
-
-btTransform convertTransform2btTransform(const Transform* t){
-    btQuaternion rotation(t->rotation_x(),t->rotation_y(),t->rotation_z(), t->rotation_w());
-
-    btVector3 position(t->position_x(), t->position_y(), t->position_z());
-
-    btTransform transform(rotation, position);
-
-    return transform;
-}
-
-void convertBtTransform2Transform( btTransform bulletTransform, Transform* transform){
-    btVector3 pos = bulletTransform.getOrigin();
-    btQuaternion rot = bulletTransform.getRotation();
-
-    transform->set_position(pos.getX(),pos.getY(), pos.getZ());
-    transform->set_rotation(rot.getW(),rot.getX(), rot.getY(), rot.getZ());
-}
-
-BulletRigidBody::BulletRigidBody(float mass, Collider *collider, Transform* startTransform)
-	: Physics3DRigidBody(mass, collider, startTransform) {
-
+BulletRigidBody::BulletRigidBody(SceneObject* sceneObject)
+	: Physics3DRigidBody(sceneObject) {
 	initialize();
 }
 
@@ -51,7 +26,7 @@ BulletRigidBody::~BulletRigidBody() {
 }
 
 void BulletRigidBody::initialize() {
-
+/*
     btTransform startTransform = convertTransform2btTransform(getTransform());
     bool isDynamic = (getMass() != 0.f);
 	btVector3 localInertia(0,0,0);
@@ -63,18 +38,19 @@ void BulletRigidBody::initialize() {
 
 
 	mRigidBody = new btRigidBody(btScalar(getMass()), myMotionState, collisionShape, localInertia);
-
-	//LOGD("INITIALIZE x: %f y: %f z: %f mass: %f", getTransform()->position_x(), getTransform()->position_y(), getTransform()->position_z(), getMass());
+*/
+	LOGD("RIGIDBODY NOT IMPLEMENTED");
 }
 
 void BulletRigidBody::finalize() {
-	if (mRigidBody->getMotionState()) {
+	/*if (mRigidBody->getMotionState()) {
 		delete mRigidBody->getMotionState();
 	}
 
 	if (mRigidBody->getCollisionShape()){
 	    delete mRigidBody->getCollisionShape();
-	}
+	}	*/
+	LOGD("RIGIDBODY NOT IMPLEMENTED");
 }
 
 void BulletRigidBody::getRotation(float &w, float &x, float &y, float &z){
