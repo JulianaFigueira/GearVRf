@@ -24,6 +24,10 @@
 
 namespace gvr {
 extern "C" {
+
+    JNIEXPORT jlong JNICALL
+        Java_org_gearvrf_physics_NativePhysics3DWorld_ctor(JNIEnv * env, jobject obj);
+
     JNIEXPORT void JNICALL
         Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,
         		jlong jrigid_body);
@@ -37,6 +41,10 @@ extern "C" {
                 jfloat jtime_step);
 }
 
+JNIEXPORT jlong JNICALL
+        Java_org_gearvrf_physics_NativePhysics3DWorld_ctor(JNIEnv * env, jobject obj){
+    return reinterpret_cast<jlong>(BulletWorld::getInstance());
+}
 
 JNIEXPORT void JNICALL
         Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,

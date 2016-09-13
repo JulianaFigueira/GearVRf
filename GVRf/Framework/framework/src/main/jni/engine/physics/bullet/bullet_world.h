@@ -20,36 +20,39 @@
 #ifndef BULLET_WORLD_H_
 #define BULLET_WORLD_H_
 
-#include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
-#include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
-
 #include "../physics3d/physics_3dworld.h"
+#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
+#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 
 namespace gvr {
 class BulletWorld : public Physics3DWorld {
 public:
 	~BulletWorld();
+    static BulletWorld* getInstance();
 
 	static void addRigidBody (PhysicsRigidBody *body);
 	static void removeRigidBody (PhysicsRigidBody *body);
 	static void step(float timeStep);
+
+    static int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB,
+                                    lwContactPoint* pointsOut, int pointCapacity);
+    static void collideWorld( void* filter, void* userData); //    static void collideWorld( PhysicsNearCallback* filter, void* userData);
 
 private:
 	BulletWorld();
 	void initialize();
 	void finalize();
 
-	static BulletWorld* getInstance();
-
 private:
-	btDynamicsWorld* mDynamicsWorld;
-	btDefaultCollisionConfiguration* mCollisionConfiguration;
+	btDynamicsWorld* mPhysicsWorld;
+	btCollisionConfiguration* mCollisionConfiguration;
 	btCollisionDispatcher* mDispatcher;
-	btBroadphaseInterface* mOverlappingPairCache;
 	btSequentialImpulseConstraintSolver* mSolver;
+	btBroadphaseInterface* mOverlappingPairCache;
 
+    btNearCallback* gTmpFilter;
+    int gNearCallbackCount = 0;
+    void* gUserData = 0;
 };
 }
 
