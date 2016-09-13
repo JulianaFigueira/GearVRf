@@ -14,7 +14,7 @@ namespace gvr {
 class Physics3DRigidBody : public PhysicsRigidBody {
 public:
     Physics3DRigidBody(SceneObject* sceneObject) : PhysicsRigidBody(sceneObject){}
-    ~Physics3DRigidBody();
+    ~Physics3DRigidBody(){}
 };
 }
 

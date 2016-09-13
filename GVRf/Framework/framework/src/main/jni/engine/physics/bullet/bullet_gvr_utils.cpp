@@ -1,6 +1,4 @@
-#include <BulletDynamics/Dynamics/btRigidBody.h>
-#include "objects/components/sphere_collider.h"
-#include <BulletCollision/CollisionShapes/btSphereShape.h>
+#include "bullet_gvr_utils.h"
 
 namespace gvr{
 btCollisionShape *convertCollider2CollisionShape(Collider *collider) {
