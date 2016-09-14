@@ -10,13 +10,12 @@ import java.util.List;
 
 public class GVRRigidBody extends GVRComponent {
 
-    public GVRRigidBody(GVRContext gvrContext,
-            List<NativeCleanupHandler> cleanupHandlers, GVRSceneObject sceneObject) {
-        super(gvrContext, Native3DRigidBody.ctor(sceneObject.getNative()), cleanupHandlers);
+    public GVRRigidBody(GVRContext gvrContext, List<NativeCleanupHandler> cleanupHandlers) {
+        super(gvrContext, Native3DRigidBody.ctor(), cleanupHandlers);
     }
 
-    public GVRRigidBody(GVRContext gvrContext, GVRSceneObject sceneObject) {
-        super(gvrContext, Native3DRigidBody.ctor(sceneObject.getNative()));
+    public GVRRigidBody(GVRContext gvrContext) {
+        super(gvrContext, Native3DRigidBody.ctor());
     }
 
     static public long getComponentType() {
@@ -57,7 +56,7 @@ public class GVRRigidBody extends GVRComponent {
 }
 
 class Native3DRigidBody {
-    static native long ctor(long jscene_object);
+    static native long ctor();
 
     static native long getComponentType();
 
