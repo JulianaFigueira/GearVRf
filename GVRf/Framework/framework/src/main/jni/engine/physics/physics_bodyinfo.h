@@ -33,7 +33,7 @@ public:
 
     static long long getComponentType()
     {
-	    return (long long) &getComponentType;
+	    return COMPONENT_TYPE_PHYSICS_RIGID_BODY;
 	}
 
     virtual float getMass() = 0;

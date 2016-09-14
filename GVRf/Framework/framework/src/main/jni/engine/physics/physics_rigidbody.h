@@ -19,7 +19,7 @@ public:
 	PhysicsRigidBody(SceneObject* sceneObject) : Component(PhysicsRigidBody::getComponentType()){}
 
 	static long long getComponentType() {
-	        return (long long) &getComponentType;
+	        return COMPONENT_TYPE_PHYSICS_RIGID_BODY;
 	}
 
 	virtual Transform* getTransform() = 0;
