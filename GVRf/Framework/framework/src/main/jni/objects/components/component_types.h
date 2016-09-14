@@ -16,15 +16,16 @@
 #define COMPONENT_TYPES_H
 
 namespace gvr {
-    static const long long COMPONENT_TYPE_TRANSFORM          = 10001;
-    static const long long COMPONENT_TYPE_LIGHT              = 10002;
-    static const long long COMPONENT_TYPE_BONE               = 10003;
-    static const long long COMPONENT_TYPE_BONE_WEIGHT        = 10004;
-    static const long long COMPONENT_TYPE_CAMERA             = 10005;
-    static const long long COMPONENT_TYPE_CAMERA_RIG         = 10006;
-    static const long long COMPONENT_TYPE_COLLIDER           = 10007;
-    static const long long COMPONENT_TYPE_RENDER_DATA        = 10008;
-    static const long long COMPONENT_TYPE_TEXTURE_CAPTURER   = 10009;
+    static const long long COMPONENT_TYPE_TRANSFORM              = 10001;
+    static const long long COMPONENT_TYPE_LIGHT                  = 10002;
+    static const long long COMPONENT_TYPE_BONE                   = 10003;
+    static const long long COMPONENT_TYPE_BONE_WEIGHT            = 10004;
+    static const long long COMPONENT_TYPE_CAMERA                 = 10005;
+    static const long long COMPONENT_TYPE_CAMERA_RIG             = 10006;
+    static const long long COMPONENT_TYPE_COLLIDER               = 10007;
+    static const long long COMPONENT_TYPE_RENDER_DATA            = 10008;
+    static const long long COMPONENT_TYPE_TEXTURE_CAPTURER       = 10009;
+    static const long long COMPONENT_TYPE_PHYSICS_RIGID_BODY     = 10010;
 }
 
 #endif

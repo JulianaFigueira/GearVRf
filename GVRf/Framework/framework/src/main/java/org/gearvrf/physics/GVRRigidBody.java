@@ -5,6 +5,7 @@ import org.gearvrf.GVRContext;
 import org.gearvrf.GVRSceneObject;
 import org.gearvrf.GVRTransform;
 
+import java.security.acl.Owner;
 import java.util.List;
 
 public class GVRRigidBody extends GVRComponent {
@@ -40,12 +41,17 @@ public class GVRRigidBody extends GVRComponent {
 
     @Override
     public void onAttach(GVRSceneObject newOwner) {
-       // GVRPhysicsWorld.addRigidBody(this);
+       if(newOwner.getCollider() == null)
+           throw new RuntimeException("GVRSceneObject needs a Collider for this operation");
+        else
+           Native3DRigidBody.onAttach();
     }
 
     @Override
     public void onDetach(GVRSceneObject oldOwner) {
-        //GVRPhysicsWorld.removeRigidBody(this);
+        if(oldOwner.getCollider() != null)
+            Native3DRigidBody.onDetach();
+        //else do nothing
     }
 
 }
@@ -60,4 +66,8 @@ class Native3DRigidBody {
     static native float setMass(long jrigid_body, float jmass);
 
     static native long updateTransform(long jrigid_body, long jtransform);
+
+    static native void onAttach();
+
+    static native void onDetach();
 }
