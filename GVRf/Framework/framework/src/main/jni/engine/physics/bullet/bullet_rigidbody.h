@@ -24,12 +24,12 @@ public:
 
 	void setMass(float mass)
 	{
-	    //TODO
+        mMass = mass;
 	}
 
 	float getMass()
 	{
-	    //TODO
+        return mMass;
 	}
 
     Transform* getTransform()
@@ -52,6 +52,7 @@ private:
 private:
 	btRigidBody *mRigidBody;
 	btTransform m_centerOfMassOffset;
+    float mMass;
 };
 }
 
