@@ -9,10 +9,11 @@
 #define BULLET_RIGIDBODY_H_
 
 #include <BulletDynamics/Dynamics/btRigidBody.h>
+#include <LinearMath/btMotionState.h>
 #include "../physics3d/physics_3drigidbody.h"
 
 namespace gvr {
-class BulletRigidBody : public Physics3DRigidBody {
+class BulletRigidBody : public Physics3DRigidBody, btMotionState {
 public:
 	BulletRigidBody(SceneObject* sceneObject);
 	virtual ~BulletRigidBody();
@@ -41,12 +42,16 @@ public:
 	void getTranslation(float &x, float &y, float &z);
     Transform* updateTransform();
 
+    void getWorldTransform(btTransform& worldTrans) const;
+    void setWorldTransform(const btTransform& worldTrans);
+
 private:
 	void initialize();
 	void finalize();
 
 private:
 	btRigidBody *mRigidBody;
+	btTransform m_centerOfMassOffset;
 };
 }
 

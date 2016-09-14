@@ -17,7 +17,7 @@ namespace gvr {
 
 
 BulletRigidBody::BulletRigidBody(SceneObject* sceneObject)
-	: Physics3DRigidBody(sceneObject) {
+	: Physics3DRigidBody(sceneObject), m_centerOfMassOffset(btTransform::getIdentity()) {
 	initialize();
 }
 
@@ -107,4 +107,15 @@ Transform* BulletRigidBody::updateTransform(){
      convertBtTransform2Transform(trans, getTransform());
      return getTransform();
  }
+
+void BulletRigidBody::getWorldTransform(btTransform &centerOfMassWorldTrans) const {
+    centerOfMassWorldTrans = m_centerOfMassOffset.inverse()
+            * convertTransform2btTransform(owner_object()->transform());
+}
+
+void BulletRigidBody::setWorldTransform(const btTransform& centerOfMassWorldTrans) {
+    btTransform m_graphicsWorldTrans = centerOfMassWorldTrans * m_centerOfMassOffset;
+    convertBtTransform2Transform(m_graphicsWorldTrans, owner_object()->transform());
+}
+
 }
