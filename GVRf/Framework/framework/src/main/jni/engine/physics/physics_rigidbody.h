@@ -16,7 +16,7 @@ namespace gvr {
 // TODO: Make it abstract class!?
 class PhysicsRigidBody : public Component {
 public:
-	PhysicsRigidBody(SceneObject* sceneObject) : Component(PhysicsRigidBody::getComponentType()){}
+    PhysicsRigidBody() : Component(PhysicsRigidBody::getComponentType()) {}
 
 	static long long getComponentType() {
 	        return COMPONENT_TYPE_PHYSICS_RIGID_BODY;

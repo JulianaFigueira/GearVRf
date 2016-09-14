@@ -15,7 +15,7 @@
 namespace gvr {
 class BulletRigidBody : public Physics3DRigidBody, btMotionState {
 public:
-	BulletRigidBody(SceneObject* sceneObject);
+	BulletRigidBody();
 	virtual ~BulletRigidBody();
 
 	btRigidBody* getRigidBody () const {

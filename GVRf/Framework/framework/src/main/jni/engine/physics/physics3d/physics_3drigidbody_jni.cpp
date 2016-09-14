@@ -13,7 +13,7 @@
 namespace gvr {
 extern "C" {
 	JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jlong jscene_object);
+    Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj);
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DRigidBody_getComponentType(JNIEnv * env, jobject obj);
@@ -32,10 +32,9 @@ extern "C" {
 }
 
 JNIEXPORT jlong JNICALL
-Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj, jlong jscene_object)
+Java_org_gearvrf_physics_Native3DRigidBody_ctor(JNIEnv * env, jobject obj)
 {
-    SceneObject* sceneObject = reinterpret_cast<SceneObject*>(jscene_object);
-    return reinterpret_cast<jlong>(new BulletRigidBody(sceneObject));
+    return reinterpret_cast<jlong>(new BulletRigidBody());
 }
 
 JNIEXPORT jlong JNICALL

@@ -32,7 +32,7 @@ public final class GVRPhysicsWorld extends GVRHybridObject {
             //TODO: if collider, create ghost body
         }else
         {
-            this.addRigidBody(new GVRRigidBody(this.getGVRContext(),sceneObject));
+            this.addRigidBody(new GVRRigidBody(this.getGVRContext()));
         }
     }
 
@@ -43,7 +43,7 @@ public final class GVRPhysicsWorld extends GVRHybridObject {
             //TODO: if collider, remove ghost body
         }else
         {
-            this.removeRigidBody(new GVRRigidBody(this.getGVRContext(), sceneObject));
+            this.removeRigidBody(new GVRRigidBody(this.getGVRContext()));
         }
     }
 
