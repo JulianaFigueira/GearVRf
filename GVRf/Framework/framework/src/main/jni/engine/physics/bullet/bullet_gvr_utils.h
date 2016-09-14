@@ -13,7 +13,7 @@ namespace gvr
 {
     btCollisionShape *convertCollider2CollisionShape(Collider *collider);
     btTransform convertTransform2btTransform(const Transform* t);
-    void convertBtTransform2Transform( btTransform bulletTransform, Transform* transform);
+    void convertBtTransform2Transform(btTransform &bulletTransform, Transform* transform);
 }
 
 #endif //FRAMEWORK_BULLET_GVR_UTILS_H

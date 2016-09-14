@@ -19,7 +19,7 @@ btTransform convertTransform2btTransform(const Transform* t){
     return transform;
 }
 
-void convertBtTransform2Transform( btTransform bulletTransform, Transform* transform){
+void convertBtTransform2Transform(btTransform &bulletTransform, Transform* transform){
     btVector3 pos = bulletTransform.getOrigin();
     btQuaternion rot = bulletTransform.getRotation();
 
