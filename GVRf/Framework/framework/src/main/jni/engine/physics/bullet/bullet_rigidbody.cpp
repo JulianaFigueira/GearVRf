@@ -17,7 +17,7 @@ namespace gvr {
 
 
 BulletRigidBody::BulletRigidBody()
-	: Physics3DRigidBody(), m_centerOfMassOffset(btTransform::getIdentity()) {
+	: Physics3DRigidBody(), mMass(0.0f), m_centerOfMassOffset(btTransform::getIdentity()) {
 	initialize();
 }
 
