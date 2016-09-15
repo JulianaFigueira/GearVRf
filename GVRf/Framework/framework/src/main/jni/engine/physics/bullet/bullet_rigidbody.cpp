@@ -18,19 +18,27 @@ namespace gvr {
 
 BulletRigidBody::BulletRigidBody()
 	: Physics3DRigidBody(), mMass(0.0f), m_centerOfMassOffset(btTransform::getIdentity()) {
-	initialize();
 }
 
 BulletRigidBody::~BulletRigidBody() {
 	finalize();
 }
 
+void BulletRigidBody::onAttach()
+{
+	initialize();
+}
+
+void BulletRigidBody::onDetach()
+{
+	finalize();
+}
+
 void BulletRigidBody::initialize() {
-/*
     btTransform startTransform = convertTransform2btTransform(getTransform());
     bool isDynamic = (getMass() != 0.f);
 	btVector3 localInertia(0,0,0);
-	btCollisionShape *collisionShape = convertCollider2CollisionShape(getCollider());
+	btCollisionShape *collisionShape = convertCollider2CollisionShape(owner_object()->collider());
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 
 	if (isDynamic)
@@ -38,19 +46,18 @@ void BulletRigidBody::initialize() {
 
 
 	mRigidBody = new btRigidBody(btScalar(getMass()), myMotionState, collisionShape, localInertia);
-*/
-	LOGD("RIGIDBODY NOT IMPLEMENTED");
+
 }
 
 void BulletRigidBody::finalize() {
-	/*if (mRigidBody->getMotionState()) {
+	if (mRigidBody->getMotionState()) {
 		delete mRigidBody->getMotionState();
 	}
 
 	if (mRigidBody->getCollisionShape()){
 	    delete mRigidBody->getCollisionShape();
-	}	*/
-	LOGD("RIGIDBODY NOT IMPLEMENTED");
+	}
+
 }
 
 void BulletRigidBody::getRotation(float &w, float &x, float &y, float &z){

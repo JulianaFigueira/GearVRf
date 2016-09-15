@@ -34,9 +34,9 @@ public:
 	static void removeRigidBody (PhysicsRigidBody *body);
 	static void step(float timeStep);
 
-    static int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB,
+    int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB,
                                     lwContactPoint* pointsOut, int pointCapacity);
-    static void collideWorld( void* filter, void* userData); //    static void collideWorld( PhysicsNearCallback* filter, void* userData);
+    void collideWorld( PhysicsNearCallback* filter, void* userData);
 
 private:
 	BulletWorld();
@@ -50,6 +50,7 @@ private:
 	btSequentialImpulseConstraintSolver* mSolver;
 	btBroadphaseInterface* mOverlappingPairCache;
 
+public:
     btNearCallback* gTmpFilter;
     int gNearCallbackCount = 0;
     void* gUserData = 0;

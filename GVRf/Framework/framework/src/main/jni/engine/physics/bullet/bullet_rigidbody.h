@@ -34,7 +34,7 @@ public:
 
     Transform* getTransform()
     {
-        //TODO
+        owner_object()->transform();
     }
 
     void setCenterOfMass(const Transform* t);
@@ -44,6 +44,9 @@ public:
 
     void getWorldTransform(btTransform& worldTrans) const;
     void setWorldTransform(const btTransform& worldTrans);
+
+    void onAttach();
+    void onDetach();
 
 private:
 	void initialize();

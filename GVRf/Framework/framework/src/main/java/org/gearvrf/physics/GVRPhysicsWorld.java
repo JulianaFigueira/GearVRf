@@ -6,15 +6,12 @@ import org.gearvrf.GVRSceneObject;
 
 import java.util.List;
 
-public final class GVRPhysicsWorld extends GVRHybridObject {
+public final class GVRPhysicsWorld extends GVRSceneObject {
     private static float stepLength = 1.0f/60.0f;
 
     public GVRPhysicsWorld(GVRContext gvrContext) {
-        super(gvrContext, NativePhysics3DWorld.ctor());
-    }
-
-    public GVRPhysicsWorld(GVRContext gvrContext, List<NativeCleanupHandler> cleanupHandlers) {
-        super(gvrContext, NativePhysics3DWorld.ctor(), cleanupHandlers);
+        super(gvrContext);
+        NativePhysics3DWorld.ctor();
     }
 
     private void addRigidBody(GVRRigidBody rigidBody) {
@@ -25,30 +22,37 @@ public final class GVRPhysicsWorld extends GVRHybridObject {
         NativePhysics3DWorld.removeRigidBody(rigidBody.getNative());
     }
 
-    public void addPhysicsObject(GVRSceneObject sceneObject)
-    {
-        GVRPhysicsBodyInfo body = (GVRPhysicsBodyInfo) sceneObject.getComponent(GVRPhysicsBodyInfo.getComponentType());
-        if(body == null) {
-            //TODO: if collider, create ghost body
-        }else
-        {
-            this.addRigidBody(new GVRRigidBody(this.getGVRContext()));
+    @Override
+    public boolean addChildObject(GVRSceneObject child) {
+        boolean result = super.addChildObject(child);
+
+        if(result) {
+            GVRRigidBody body = (GVRRigidBody) child.getComponent(GVRRigidBody.getComponentType());
+            if (body == null) {
+                //TODO: if collider, create ghost body
+            } else {
+                this.addRigidBody(new GVRRigidBody(this.getGVRContext()));
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void removeChildObject(GVRSceneObject child){
+        boolean result = super.addChildObject(child);
+
+        if(result) {
+                GVRRigidBody body = (GVRRigidBody) child.getComponent(GVRRigidBody.getComponentType());
+            if(body == null) {
+                //TODO: if collider, remove ghost body
+            }else
+            {
+                this.removeRigidBody(new GVRRigidBody(this.getGVRContext()));
+            }
         }
     }
 
-    public void removePhysicsObject(GVRSceneObject sceneObject)
-    {
-        GVRPhysicsBodyInfo body = (GVRPhysicsBodyInfo) sceneObject.getComponent(GVRPhysicsBodyInfo.getComponentType());
-        if(body == null) {
-            //TODO: if collider, remove ghost body
-        }else
-        {
-            this.removeRigidBody(new GVRRigidBody(this.getGVRContext()));
-        }
-    }
-
-    public void setStepLength(float stepLen)
-    {
+    public void setStepLength(float stepLen) {
         stepLength = stepLen;
     }
 

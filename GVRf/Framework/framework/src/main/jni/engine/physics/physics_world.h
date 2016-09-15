@@ -21,8 +21,10 @@
 #define PHYSICS_WORLD_H_
 
 #include "physics_rigidbody.h"
-#include "../objects/hybrid_object.h"
+#include "../objects/scene_object.h"
 namespace gvr {
+
+class PhysicsNearCallback; //TODO write this?
 
 struct lwContactPoint
 	{
@@ -32,7 +34,7 @@ struct lwContactPoint
 		float  m_distance;
 	};
 
-class PhysicsWorld : HybridObject {
+class PhysicsWorld {
 public:
 
 	static void addRigidBody (PhysicsRigidBody *body);
@@ -41,9 +43,9 @@ public:
 
 	static void step (float timeStep);
 
-    //static int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB, lwContactPoint* pointsOut, int pointCapacity);
+    static int collide(PhysicsRigidBody* colA, PhysicsRigidBody* colB, lwContactPoint* pointsOut, int pointCapacity);
 
-    //static void collideWorld( void* filter, void* userData); //static void collideWorld( PhysicsNearCallback* filter, void* userData);
+    static void collideWorld(PhysicsNearCallback* filter, void* userData);
 };
 }
 
