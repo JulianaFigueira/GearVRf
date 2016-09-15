@@ -2,11 +2,41 @@
 
 namespace gvr{
 btCollisionShape *convertCollider2CollisionShape(Collider *collider) {
-	SphereCollider *sphereCollider = static_cast<SphereCollider*>(collider);
+    btCollisionShape *shape = NULL;
 
-	btCollisionShape *collisionShape = new btSphereShape(btScalar(sphereCollider->get_radius()));
+    shape = convertSphereCollider2CollisionShape(static_cast<SphereCollider *>(collider));
+    if (shape != NULL) {
+       return shape;
+    }
 
-	return collisionShape;
+    shape = convertBoxCollider2CollisionShape(static_cast<BoxCollider *>(collider));
+    if (shape != NULL) {
+       return shape;
+    }
+
+    return NULL;
+}
+
+btCollisionShape *convertSphereCollider2CollisionShape(SphereCollider *collider) {
+    btCollisionShape *shape = NULL;
+
+    if (collider != NULL) {
+        shape = new btSphereShape(btScalar(collider->get_radius()));
+    }
+
+    return shape;
+}
+
+btCollisionShape *convertBoxCollider2CollisionShape(BoxCollider *collider) {
+    btCollisionShape *shape = NULL;
+
+    if (collider != NULL) {
+        shape = new btBoxShape(btVector3(collider->get_half_extents().x,
+                                         collider->get_half_extents().y,
+                                         collider->get_half_extents().z));
+    }
+
+    return shape;
 }
 
 btTransform convertTransform2btTransform(const Transform* t){
@@ -28,4 +58,3 @@ void convertBtTransform2Transform(btTransform &bulletTransform, Transform* trans
 }
 
 }
-
