@@ -29,6 +29,14 @@ extern "C" {
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DRigidBody_updateTransform(JNIEnv * env, jobject obj,
         		jlong jrigid_body, jlong jtransform);
+
+    JNIEXPORT void JNICALL
+            Java_org_gearvrf_physics_Native3DRigidBody_onAttach(JNIEnv * env, jobject obj,
+                		jlong jrigid_body);
+
+    JNIEXPORT void JNICALL
+            Java_org_gearvrf_physics_Native3DRigidBody_onDetach(JNIEnv * env, jobject obj,
+                		jlong jrigid_body);
 }
 
 JNIEXPORT jlong JNICALL
@@ -72,5 +80,19 @@ JNIEXPORT void JNICALL
     outTransform->set_position(transform->position_x(), transform->position_y(), transform->position_z());
     outTransform->set_rotation(transform->rotation_w(), transform->rotation_x(), transform->rotation_y(),
                                                                              transform->rotation_z());
+}
+
+JNIEXPORT void JNICALL
+            Java_org_gearvrf_physics_Native3DRigidBody_onAttach(JNIEnv * env, jobject obj,
+                		jlong jrigid_body){
+     BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+     rigid_body->onAttach();
+}
+
+    JNIEXPORT void JNICALL
+            Java_org_gearvrf_physics_Native3DRigidBody_onDetach(JNIEnv * env, jobject obj,
+                		jlong jrigid_body){
+   BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+   rigid_body->onDetach();
 }
 }

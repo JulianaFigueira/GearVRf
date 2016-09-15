@@ -67,9 +67,9 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
     private GVREventReceiver mEventReceiver = new GVREventReceiver(this);
     private GVRMaterial mShadowMaterial = null;
     private boolean mShadowMapDirty = true;
-    private GVRSceneObject mSceneRoot;
-    private GVRPhysicsWorld mPhysicsWorld;
-
+    //private GVRSceneObject mSceneRoot;
+    //private GVRPhysicsWorld mPhysicsWorld;
+    private GVRPhysicsWorld mSceneRoot;
     /**
      * Constructs a scene with a camera rig holding left & right cameras in it.
      * 
@@ -78,7 +78,7 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
      */
     public GVRScene(GVRContext gvrContext) {
         super(gvrContext, NativeScene.ctor());
-        mSceneRoot = new GVRSceneObject(gvrContext);
+        mSceneRoot = new GVRPhysicsWorld(gvrContext);
         NativeScene.addSceneObject(getNative(), mSceneRoot.getNative());
         GVRCamera leftCamera = new GVRPerspectiveCamera(gvrContext);
         leftCamera.setRenderMask(GVRRenderMaskBit.Left);
@@ -107,11 +107,9 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
 
     private GVRScene(GVRContext gvrContext, long ptr) {
         super(gvrContext, ptr);
-        mSceneRoot = new GVRSceneObject(gvrContext);
+        mSceneRoot = new GVRPhysicsWorld(gvrContext);
         NativeScene.addSceneObject(getNative(), mSceneRoot.getNative());
         setFrustumCulling(true);
-
-        mPhysicsWorld = new GVRPhysicsWorld(gvrContext);
     }
     
     /**
@@ -124,10 +122,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
     public void addSceneObject(GVRSceneObject sceneObject) {
         mSceneRoot.addChildObject(sceneObject);
         bindShaders(sceneObject);
-
-        GVRCollider collider = sceneObject.getCollider();
-        if(collider != null)
-            this.mPhysicsWorld.addPhysicsObject(sceneObject);
     }
 
     /**
@@ -138,10 +132,6 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
      *            The {@linkplain GVRSceneObject scene object} to remove.
      */
     public void removeSceneObject(GVRSceneObject sceneObject) {
-        GVRCollider collider = sceneObject.getCollider();
-        if(collider != null)
-            this.mPhysicsWorld.removePhysicsObject(sceneObject);
-
         mSceneRoot.removeChildObject(sceneObject);
     }
 
@@ -163,7 +153,7 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
         {
             mLightList.clear();
         }
-        mSceneRoot = new GVRSceneObject(getGVRContext());
+        mSceneRoot = new GVRPhysicsWorld(getGVRContext());
         mSceneRoot.addChildObject(head);
         NativeScene.addSceneObject(getNative(), mSceneRoot.getNative());
     }
@@ -702,12 +692,12 @@ public class GVRScene extends GVRHybridObject implements PrettyPrint, IScriptabl
 
     public void stepPhysicsSimulation(float step)
     {
-        this.mPhysicsWorld.step(step);
+        this.mSceneRoot.step(step);
     }
 
     public void stepPhysicsSimulation()
     {
-        this.mPhysicsWorld.step();
+        this.mSceneRoot.step();
     }
 }
 

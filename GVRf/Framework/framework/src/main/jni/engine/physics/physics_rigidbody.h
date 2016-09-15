@@ -28,6 +28,8 @@ public:
     virtual void setCenterOfMass(const Transform* t) = 0;
 	virtual void getRotation(float &w, float &x, float &y, float &z) = 0;
     virtual void getTranslation(float &x, float &y, float &z) = 0;
+    virtual void onAttach() = 0;
+    virtual void onDetach() = 0;
 };
 }
 

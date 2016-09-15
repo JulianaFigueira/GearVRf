@@ -94,44 +94,21 @@ BulletWorld* BulletWorld::getInstance()
     static BulletWorld instance;
     return &instance;
 }
- /*
+
 //FROM BULLET
-void Bullet2NearCallback(btBroadphasePair& collisionPair, btCollisionDispatcher& dispatcher,
-                                                               const btDispatcherInfo& dispatchInfo)
-{
-    btCollisionObject* colObj0 = (btCollisionObject*)collisionPair.m_pProxy0->m_clientObject;
-    btCollisionObject* colObj1 = (btCollisionObject*)collisionPair.m_pProxy1->m_clientObject;
-    if(gTmpFilter)
-    {
-        gTmpFilter(BulletWorld::getInstance()->mPhysicsWorld, gUserData,colObj0,colObj1);
-        gNearCallbackCount++;
-    }
-}
 
-void BulletWorld::collideWorld(void* filter, void* userData)
-//void BulletWorld::collideWorld(PhysicsNearCallback* filter, void* userData)
-{
-    gTmpFilter = filter;
-    gNearCallbackCount = 0;
-    gUserData = userData;
-    getInstance()->mDispatcher->setNearCallback(Bullet2NearCallback);
-    getInstance()->mPhysicsWorld->performDiscreteCollisionDetection();
-    gTmpFilter = 0;
-}
-
-struct   Bullet2ContactResultCallback : public btWorld::ContactResultCallback
+/*
+struct   Bullet2ContactResultCallback : public btCollisionWorld::ContactResultCallback
 {
     int m_numContacts;
     lwContactPoint* m_pointsOut;
     int m_pointCapacity;
 
     Bullet2ContactResultCallback(lwContactPoint* pointsOut, int pointCapacity) :
-	m_numContacts(0),
-		m_pointsOut(pointsOut),
-		m_pointCapacity(pointCapacity)
-    {
-    }
-    virtual   btScalar   addSingleResult(btManifoldPoint& cp,   const btCollisionObjectWrapper* colObj0Wrap,int partId0,int index0,const btCollisionObjectWrapper* colObj1Wrap,int partId1,int index1)
+		m_numContacts(0), m_pointsOut(pointsOut), m_pointCapacity(pointCapacity) {}
+
+    virtual btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap,
+        int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
     {
         if (m_numContacts<m_pointCapacity)
         {
@@ -148,24 +125,49 @@ struct   Bullet2ContactResultCallback : public btWorld::ContactResultCallback
             ptOut.m_ptOnBWorld[2] = cp.m_positionWorldOnB[2];
             m_numContacts++;
         }
-
         return 1.f;
     }
 };
-
-int BulletWorld::collide(PhysicsRigidBody* colObjA, PhysicsRigidBody* colObjB,
-                                                  lwContactPoint* pointsOut, int pointCapacity
+void Bullet2NearCallback(btBroadphasePair& collisionPair, btCollisionDispatcher& dispatcher,
+                                                               const btDispatcherInfo& dispatchInfo)
 {
-    btWorld* World = BulletWorld::getInstance()->mPhysicsWorld;
-    if (World && colObjA && colObjB)
+    btCollisionObject* colObj0 = (btCollisionObject*)collisionPair.m_pProxy0->m_clientObject;
+    btCollisionObject* colObj1 = (btCollisionObject*)collisionPair.m_pProxy1->m_clientObject;
+    if(BulletWorld::getInstance()->gTmpFilter)
     {
-        Bullet2ContactResultCallback cb(pointsOut,pointCapacity);
-        getInstance()->mPhysicsWorld->contactPairTest((btCollisionObject*)colObjA->getRigidBody(),
-                                                      (btCollisionObject*)colObjB->getRigidBody(),cb);
-        return cb.m_numContacts;
+        BulletWorld::getInstance()->gTmpFilter((btCollisionWorld*)(BulletWorld::getInstance()->mPhysicsWorld),
+                                            (void*)(BulletWorld::getInstance()->gUserData), colObj0, colObj1);
+        BulletWorld::getInstance()->gNearCallbackCount++;
     }
-    return 0;
 }
 */
+
+void BulletWorld::collideWorld(PhysicsNearCallback* filter, void* userData)
+{
+    /*
+    getInstance()->gTmpFilter = filter;
+    getInstance()->gNearCallbackCount = 0;
+    getInstance()->gUserData = userData;
+    getInstance()->mDispatcher->setNearCallback(Bullet2NearCallback);
+    getInstance()->mPhysicsWorld->performDiscreteCollisionDetection();
+    gTmpFilter = 0;
+    */
+}
+
+int BulletWorld::collide(PhysicsRigidBody* colObjA, PhysicsRigidBody* colObjB,
+                                                  lwContactPoint* pointsOut, int pointCapacity)
+{
+    /*
+    if (colObjA && colObjB)
+    {
+        Bullet2ContactResultCallback cb(pointsOut,pointCapacity);
+        getInstance()->mPhysicsWorld->contactPairTest((btCollisionObject*)((BulletRigidBody*)colObjA)->getRigidBody(),
+                                                      (btCollisionObject*)((BulletRigidBody*)colObjB)->getRigidBody(),cb);
+        return cb.m_numContacts;
+    }
+    */
+    return 0;
+}
+
 }
 
