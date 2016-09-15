@@ -622,7 +622,7 @@ public class GVRSceneObject extends GVRHybridObject implements PrettyPrint, IScr
      * @param rigidBody
      *            New {@link org.gearvrf.physics.GVRRigidBody}.
      */
-    protected void attachRigidBody(GVRRigidBody rigidBody) {
+    public void attachRigidBody(GVRRigidBody rigidBody) {
         if(getCollider() != null)
             attachComponent(rigidBody);
         else
