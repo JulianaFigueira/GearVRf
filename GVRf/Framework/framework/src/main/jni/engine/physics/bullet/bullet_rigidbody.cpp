@@ -35,18 +35,17 @@ void BulletRigidBody::onDetach()
 }
 
 void BulletRigidBody::initialize() {
-    btTransform startTransform = convertTransform2btTransform(getTransform());
+    //btTransform startTransform = convertTransform2btTransform(getTransform());
     bool isDynamic = (getMass() != 0.f);
 	btVector3 localInertia(0,0,0);
 	btCollisionShape *collisionShape = convertCollider2CollisionShape(owner_object()->collider());
-	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	//btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 
 	if (isDynamic)
 		collisionShape->calculateLocalInertia(getMass(),localInertia);
 
 
-	mRigidBody = new btRigidBody(btScalar(getMass()), myMotionState, collisionShape, localInertia);
-
+	mRigidBody = new btRigidBody(btScalar(getMass()), this, collisionShape, localInertia);
 }
 
 void BulletRigidBody::finalize() {
