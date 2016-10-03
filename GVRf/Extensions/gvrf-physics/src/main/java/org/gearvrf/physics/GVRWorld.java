@@ -19,7 +19,13 @@ import org.gearvrf.GVRBehavior;
 import org.gearvrf.GVRContext;
 import org.gearvrf.GVRSceneObject;
 import org.gearvrf.ISceneObjectEvents;
-import org.gearvrf.utility.Log;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 
 /**
  *  Represents a physics world where all {@link GVRSceneObject} with {@link GVRRigidBody} component
@@ -27,7 +33,10 @@ import org.gearvrf.utility.Log;
  *
  *  {@link GVRWorld} is a component that must be attached to the scene's root object.
  */
+
 public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
+    private Map<Long, GVRRigidBody> mRigidBodies = new HashMap<Long, GVRRigidBody>();
+    private LinkedList<GVRCollisionInfo> mPreviousCollisions = new LinkedList<GVRCollisionInfo>();
 
     static {
         System.loadLibrary("gvrf-physics");
@@ -35,23 +44,63 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
 
     public GVRWorld(GVRContext gvrContext) {
         super(gvrContext, NativePhysics3DWorld.ctor());
-
         mHasFrameCallback = false;
     }
 
     static public long getComponentType() { return NativePhysics3DWorld.getComponentType(); }
 
     public boolean addBody(GVRRigidBody gvrBody) {
+        this.mRigidBodies.put(gvrBody.getNative(), gvrBody);
         return NativePhysics3DWorld.addRigidBody(getNative(), gvrBody.getNative());
     }
 
     public void removeBody(GVRRigidBody gvrBody) {
+        this.mRigidBodies.remove(gvrBody.getNative());
         NativePhysics3DWorld.removeRigidBody(getNative(), gvrBody.getNative());
     }
 
     @Override
     public void onDrawFrame(float frameTime) {
         NativePhysics3DWorld.step(getNative(), frameTime);
+        generateCollisionEvents();
+    }
+
+    private void generateCollisionEvents(){
+        LinkedList<GVRCollisionInfo> collisionInfos = new LinkedList<GVRCollisionInfo>();
+
+        if (!NativePhysics3DWorld.listCollisions(getNative(), collisionInfos)){
+            return;
+        }
+
+        for (GVRCollisionInfo info : collisionInfos){
+
+            String eventName = "";
+
+            if (mPreviousCollisions.contains(info)) {
+                mPreviousCollisions.remove(info);
+                eventName = "onInside";
+            } else {
+                eventName = "onEnter";
+            }
+
+            sendCollisionEvent(info, eventName);
+        }
+
+        for ( GVRCollisionInfo cp : mPreviousCollisions){
+            sendCollisionEvent(cp, "onExit");
+        }
+
+        mPreviousCollisions = collisionInfos;
+    }
+
+    private void sendCollisionEvent(GVRCollisionInfo info, String eventName) {
+        GVRSceneObject bodyA = mRigidBodies.get(info.bodyA).getOwnerObject();
+        GVRSceneObject bodyB = mRigidBodies.get(info.bodyB).getOwnerObject();
+
+        if (bodyA.getEventReceiver() != null) {
+            getGVRContext().getEventManager().sendEvent(bodyA, ICollisionEvents.class, eventName,
+                    bodyA, bodyB, info.normal, info.distance);
+        }
     }
 
     @Override
@@ -116,4 +165,6 @@ class NativePhysics3DWorld {
     static native void removeRigidBody(long jphysics_world, long jrigid_body);
 
     static native void step(long jphysics_world, float jtime_step);
+
+    static native boolean listCollisions(long jphysics_world, Object jnewlist);
 }

@@ -52,7 +52,9 @@ public:
     void onAttach();
     void onDetach();
 
-    float center_x() const;
+	bool checkCollideWith(const PhysicsRigidBody* physicsRigidBody );
+
+	float center_x() const;
     float center_y() const;
     float center_z() const;
     void  set_center(float x, float y, float z);

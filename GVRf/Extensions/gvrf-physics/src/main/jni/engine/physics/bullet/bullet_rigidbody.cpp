@@ -50,6 +50,8 @@ void BulletRigidBody::onAttach() {
     mRigidBody->setMotionState(this);
     mRigidBody->setCollisionShape(mConstructionInfo.m_collisionShape);
     mRigidBody->setMassProps(mConstructionInfo.m_mass, mConstructionInfo.m_localInertia);
+    mRigidBody->setCollisionFlags(mRigidBody->getCollisionFlags() |
+                             btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
     updateColisionShapeLocalScaling();
 }
 
@@ -57,6 +59,7 @@ void BulletRigidBody::onDetach() { }
 
 void BulletRigidBody::initialize() {
     mRigidBody = new btRigidBody(mConstructionInfo);
+    mRigidBody->setUserPointer(this);
 }
 
 void BulletRigidBody::finalize() {
@@ -71,7 +74,12 @@ void BulletRigidBody::finalize() {
     }
 }
 
-void BulletRigidBody::getRotation(float &w, float &x, float &y, float &z) {
+bool BulletRigidBody::checkCollideWith(const PhysicsRigidBody* physicsRigidBody ){
+    return mRigidBody->checkCollideWith( ((BulletRigidBody*)physicsRigidBody)->mRigidBody);
+}
+
+
+    void BulletRigidBody::getRotation(float &w, float &x, float &y, float &z) {
     btTransform trans;
 
     if (mRigidBody->getMotionState()) {

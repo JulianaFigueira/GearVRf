@@ -42,6 +42,10 @@ extern "C" {
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_NativePhysics3DWorld_step(JNIEnv * env, jobject obj,
             jlong jworld, jfloat jtime_step);
+
+    JNIEXPORT bool JNICALL
+    Java_org_gearvrf_physics_NativePhysics3DWorld_listCollisions(JNIEnv * env, jobject obj,
+                                                                    jlong jworld, jobject jnewlist);
 }
 
 JNIEXPORT jlong JNICALL
@@ -79,4 +83,60 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_step(JNIEnv * env, jobject obj,
 
     world->step((float)jtime_step);
 }
+
+JNIEXPORT bool JNICALL
+Java_org_gearvrf_physics_NativePhysics3DWorld_listCollisions(JNIEnv * env, jobject obj, jlong jworld
+                                                                                , jobject jnewlist){
+
+    jclass collisionInfoClass = env->FindClass("org/gearvrf/physics/GVRCollisionInfo");
+    jmethodID collisionInfoConstructor = env->GetMethodID(collisionInfoClass, "<init>", "(JJ[FF)V");
+
+    jclass linkedListClass = env->GetObjectClass(jnewlist);
+    jmethodID linkedListAdd = env->GetMethodID(linkedListClass, "addLast", "(Ljava/lang/Object;)V");
+
+    BulletWorld *world = reinterpret_cast <BulletWorld*> (jworld);
+    std::vector <ContactPoint> contactPoints;
+
+    if (world == 0 || collisionInfoClass == 0 || collisionInfoConstructor == 0 || linkedListClass == 0
+        || linkedListAdd == 0)
+    {
+        return false;
+    }
+
+    world->listCollisions(contactPoints);
+
+    int size = contactPoints.size();
+
+    if (size <= 0)
+    {
+        return false;
+    }
+
+    bool wasOk = true;
+    for (auto it = contactPoints.begin(); it != contactPoints.end(); ++it)
+    {
+        const ContactPoint& data = *it;
+
+        jfloatArray normal = env->NewFloatArray(3);
+        env->SetFloatArrayRegion(normal, 0, 3, data.normal);
+
+        jobject contactObject = env->NewObject(collisionInfoClass, collisionInfoConstructor,
+                                               (jlong)data.body0, (jlong)data.body1,
+                                               (jfloatArray)normal, (jfloat)data.distance);
+
+        if (contactObject != 0){
+            env->CallVoidMethod(jnewlist, linkedListAdd, contactObject);
+            env->DeleteLocalRef(contactObject);
+        } else {
+            wasOk = false;
+            break;
+        }
+    }
+
+    env->DeleteLocalRef(collisionInfoClass);
+    env->DeleteLocalRef(linkedListClass);
+
+    return wasOk;
+}
+
 }

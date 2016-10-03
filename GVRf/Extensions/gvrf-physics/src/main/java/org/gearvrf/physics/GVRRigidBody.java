@@ -245,6 +245,10 @@ public class GVRRigidBody extends GVRComponent implements ISceneObjectEvents {
         Native3DRigidBody.onDetach(getNative());
     }
 
+    public boolean checkCollideWith(GVRRigidBody rigidBody){
+        return Native3DRigidBody.checkCollideWith(getNative(), rigidBody.getNative());
+    }
+
     @Override
     public void onInit(GVRContext gvrContext, GVRSceneObject sceneObject) {
         sceneObject.getEventReceiver().removeListener(this);
@@ -393,6 +397,8 @@ class Native3DRigidBody {
     static native void onAttach(long jrigid_body);
 
     static native void onDetach(long jrigid_body);
+
+    static native boolean checkCollideWith(long jrigid_body1, long jrigid_body2);
 
     static native float getCenterX(long jrigid_body);
 

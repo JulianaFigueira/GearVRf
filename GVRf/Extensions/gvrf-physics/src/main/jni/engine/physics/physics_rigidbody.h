@@ -42,6 +42,7 @@ public:
     virtual void applyTorque(float x, float y, float z) = 0;
     virtual void onAttach() = 0;
     virtual void onDetach() = 0;
+	virtual bool checkCollideWith(const PhysicsRigidBody* physicsRigidBody ) = 0;
 
 	virtual float center_x() const  = 0;
 	virtual float center_y() const  = 0;
