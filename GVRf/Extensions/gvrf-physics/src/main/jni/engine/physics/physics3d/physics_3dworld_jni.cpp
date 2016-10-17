@@ -122,10 +122,10 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_listCollisions(JNIEnv * env, jobje
 
         jobject contactObject = env->NewObject(collisionInfoClass, collisionInfoConstructor,
                                                (jlong)data.body0, (jlong)data.body1,
-                                               (jfloatArray)normal, (jfloat)data.distance);
+                                               (jfloatArray)normal, (jfloat)data.distance); //expensive op
 
         if (contactObject != 0){
-            env->CallVoidMethod(jnewlist, linkedListAdd, contactObject);
+            env->CallVoidMethod(jnewlist, linkedListAdd, contactObject); //expensive op
             env->DeleteLocalRef(contactObject);
         } else {
             wasOk = false;

@@ -66,28 +66,26 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
     }
 
     private void generateCollisionEvents(){
-        LinkedList<GVRCollisionInfo> collisionInfos = new LinkedList<GVRCollisionInfo>();
+        LinkedList <GVRCollisionInfo> collisionInfos = new LinkedList<GVRCollisionInfo>();
 
         if (!NativePhysics3DWorld.listCollisions(getNative(), collisionInfos)){
             return;
         }
 
-        for (GVRCollisionInfo info : collisionInfos){
+        String eventName = "onEnter";
+        for ( GVRCollisionInfo info : collisionInfos ){
 
-            String eventName = "";
-
-            if (mPreviousCollisions.contains(info)) {
-                mPreviousCollisions.remove(info);
-                eventName = "onInside";
+            if ( mPreviousCollisions.contains ( info ) ) {
+                //eventName = "onInside";
+                mPreviousCollisions.remove ( info );
             } else {
-                eventName = "onEnter";
+                sendCollisionEvent ( info , eventName );
             }
-
-            sendCollisionEvent(info, eventName);
         }
 
-        for ( GVRCollisionInfo cp : mPreviousCollisions){
-            sendCollisionEvent(cp, "onExit");
+        eventName = "onExit";
+        for ( GVRCollisionInfo cp : mPreviousCollisions ){
+            sendCollisionEvent ( cp , eventName );
         }
 
         mPreviousCollisions = collisionInfos;
@@ -97,10 +95,8 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
         GVRSceneObject bodyA = mRigidBodies.get(info.bodyA).getOwnerObject();
         GVRSceneObject bodyB = mRigidBodies.get(info.bodyB).getOwnerObject();
 
-        if (bodyA.getEventReceiver() != null) {
-            getGVRContext().getEventManager().sendEvent(bodyA, ICollisionEvents.class, eventName,
-                    bodyA, bodyB, info.normal, info.distance);
-        }
+        getGVRContext().getEventManager().sendEvent(bodyA, ICollisionEvents.class, eventName,
+                bodyA, bodyB, info.normal, info.distance);
     }
 
     @Override

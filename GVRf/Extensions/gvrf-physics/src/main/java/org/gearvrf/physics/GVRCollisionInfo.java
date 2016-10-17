@@ -1,6 +1,5 @@
 package org.gearvrf.physics;
 
-import org.gearvrf.GVRTransform;
 
 class GVRCollisionInfo {
 

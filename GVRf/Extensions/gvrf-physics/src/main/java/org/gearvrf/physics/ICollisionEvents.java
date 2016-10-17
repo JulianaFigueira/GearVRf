@@ -31,13 +31,7 @@ public interface ICollisionEvents extends IEvents {
     void onEnter(GVRSceneObject sceneObj0, GVRSceneObject sceneObj1, float normal[], float distance);
 
     /**
-     * Called while the collision is happening on a scene object.
-     */
-    void onInside(GVRSceneObject sceneObj0, GVRSceneObject sceneObj1, float normal[], float distance);
-
-    /**
      * Called when a Collision stops on a scene object.
      */
-    void onExit(GVRSceneObject sceneObj0, GVRSceneObject sceneObj1, float normal[], float distance
-    );
+    void onExit(GVRSceneObject sceneObj0, GVRSceneObject sceneObj1, float normal[], float distance);
 }
