@@ -35,10 +35,10 @@ public class GVRRigidBody extends GVRComponent implements ISceneObjectEvents {
         System.loadLibrary("gvrf-physics");
     }
 
-    public GVRRigidBody(GVRContext gvrContext) {
-        super(gvrContext, Native3DRigidBody.ctor());
+    private boolean mIsInitialized = false;
 
-        Native3DRigidBody.setMass(getNative(), 0.0f);
+    public GVRRigidBody(GVRContext gvrContext) {
+        this(gvrContext, 0.0f);
     }
 
     public GVRRigidBody(GVRContext gvrContext, float mass) {
@@ -219,6 +219,94 @@ public class GVRRigidBody extends GVRComponent implements ISceneObjectEvents {
         Native3DRigidBody.applyTorque(getNative(), x, y, z);
     }
 
+    public void setGravity(float x, float y, float z) {
+        Native3DRigidBody.setGravity(getNative(), x, y, z);
+    }
+
+    public void setDamping(float linear, float angular) {
+        Native3DRigidBody.setDamping(getNative(), linear, angular);
+    }
+
+    public void setLinearVelocity(float x, float y, float z) {
+        Native3DRigidBody.setLinearVelocity(getNative(), x, y, z);
+    }
+
+    public void setAngularVelocity(float x, float y, float z) {
+        Native3DRigidBody.setAngularVelocity(getNative(), x, y, z);
+    }
+
+    public void setAngularFactor(float x, float y, float z) {
+        Native3DRigidBody.setAngularFactor(getNative(), x, y, z);
+    }
+
+    public void setLinearFactor(float x, float y, float z) {
+        Native3DRigidBody.setLinearFactor(getNative(), x, y, z);
+    }
+
+    public void setFriction(float n) {
+        Native3DRigidBody.setFriction(getNative(), n);
+    }
+
+    public void setRestitution(float n) {
+        Native3DRigidBody.setRestitution(getNative(), n);
+    }
+
+    public void setSleepingThresholds(float linear, float angular) {
+        Native3DRigidBody.setSleepingThresholds(getNative(), linear, angular);
+    }
+
+    public void setCcdMotionThreshold(float n) {
+        Native3DRigidBody.setCcdMotionThreshold(getNative(), n);
+    }
+
+    public void setContactProcessingThreshold(float n) {
+        Native3DRigidBody.setContactProcessingThreshold(getNative(), n);
+    }
+
+    public void setIgnoreCollisionCheck(GVRRigidBody collisionObject, boolean ignore) {
+        Native3DRigidBody.setIgnoreCollisionCheck(getNative(), collisionObject.getNative(), ignore);
+    }
+
+    public float[] getGravity() {
+        return Native3DRigidBody.getGravity(getNative());
+    }
+
+    public float[] getLinearVelocity() {
+        return Native3DRigidBody.getLinearVelocity(getNative());
+    }
+
+    public float[] getAngularVelocity() {
+        return Native3DRigidBody.getAngularVelocity(getNative());
+    }
+
+    public float[] getAngularFactor() {
+        return Native3DRigidBody.getAngularFactor(getNative());
+    }
+
+    public float[] getLinearFactor() {
+        return Native3DRigidBody.getLinearFactor(getNative());
+    }
+
+    public float[] getDamping() {
+        return Native3DRigidBody.getDamping(getNative());
+    }
+
+    public  float getFriction() {
+        return Native3DRigidBody.getFriction(getNative());
+    }
+
+    public  float getRestitution() {
+        return Native3DRigidBody.getRestitution(getNative());
+    }
+
+    public  float getCcdMotionThreshold() {
+        return Native3DRigidBody.getCcdMotionThreshold(getNative());
+    }
+
+    public  float getContactProcessingThreshold() {
+        return Native3DRigidBody.getContactProcessingThreshold(getNative());
+    }
+
     @Override
     public void onAttach(GVRSceneObject newOwner) {
         super.onAttach(newOwner);
@@ -234,131 +322,81 @@ public class GVRRigidBody extends GVRComponent implements ISceneObjectEvents {
     public void onDetach(GVRSceneObject oldOwner) {
         super.onDetach(oldOwner);
 
-        oldOwner.getEventReceiver().removeListener(this);
-
-        GVRWorld world = getWorld(oldOwner);
-
-        if (world != null) {
-            world.removeBody(this);
+        if (mIsInitialized) {
+            doPhysicsDetach(oldOwner);
+        } else {
+            oldOwner.getEventReceiver().removeListener(this);
         }
+    }
 
-        Native3DRigidBody.onDetach(getNative());
+    @Override
+    public void onEnable() {
+        super.onEnable();
+
+        if (mIsInitialized) {
+            addToWorld(getOwnerObject());
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+
+        if (mIsInitialized) {
+            removeFromWorld(getOwnerObject());
+        }
     }
 
     @Override
     public void onInit(GVRContext gvrContext, GVRSceneObject sceneObject) {
         sceneObject.getEventReceiver().removeListener(this);
 
+        if (!mIsInitialized) {
+            doPhysicsAttach(sceneObject);
+        }
+
+        mIsInitialized = true;
+    }
+
+    @Override
+    public void onLoaded() { }
+
+    @Override
+    public void onAfterInit() { }
+
+    @Override
+    public void onStep() { }
+
+    private void doPhysicsAttach(GVRSceneObject owner) {
         Native3DRigidBody.onAttach(getNative());
 
-        GVRWorld world = getWorld(sceneObject);
+        if (isEnabled()) {
+            addToWorld(owner);
+        }
+    }
+
+    private void doPhysicsDetach(GVRSceneObject owner) {
+        if (isEnabled()) {
+            removeFromWorld(owner);
+        }
+
+        Native3DRigidBody.onDetach(getNative());
+    }
+
+    private void addToWorld(GVRSceneObject owner) {
+        GVRWorld world = getWorld(owner);
 
         if (world != null) {
             world.addBody(this);
         }
     }
 
-    public void setGravity (float x, float y, float z){
-        Native3DRigidBody.setGravity (getNative(), x, y, z);
-    }
+    private void removeFromWorld(GVRSceneObject owner) {
+        GVRWorld world = getWorld(owner);
 
-    public void setDamping (float linear, float angular){
-        Native3DRigidBody.setDamping(getNative(), linear, angular);
-    }
-
-    public void setLinearVelocity (float x, float y, float z){
-        Native3DRigidBody.setLinearVelocity (getNative(), x, y, z);
-    }
-
-    public void setAngularVelocity (float x, float y, float z){
-        Native3DRigidBody.setAngularVelocity (getNative(), x, y, z);
-    }
-
-    public void setAngularFactor (float x, float y, float z){
-        Native3DRigidBody.setAngularFactor(getNative(), x, y, z);
-    }
-
-    public void setLinearFactor (float x, float y, float z){
-        Native3DRigidBody.setLinearFactor (getNative(), x, y, z);
-    }
-
-    public void setFriction (float n){
-        Native3DRigidBody.setFriction (getNative(), n);
-    }
-
-    public void setRestitution (float n){
-        Native3DRigidBody.setRestitution(getNative(), n);
-    }
-
-    public void setSleepingThresholds (float linear, float angular){
-        Native3DRigidBody.setSleepingThresholds(getNative(), linear, angular);
-    }
-
-    public void setCcdMotionThreshold (float n){
-        Native3DRigidBody.setCcdMotionThreshold(getNative(), n);
-    }
-
-    public void setContactProcessingThreshold (float n){
-        Native3DRigidBody.setContactProcessingThreshold(getNative(), n);
-    }
-
-    public void setIgnoreCollisionCheck (GVRRigidBody collisionObject, boolean ignore){
-        Native3DRigidBody.setIgnoreCollisionCheck(getNative(), collisionObject.getNative(), ignore);
-    }
-
-    public float[] getGravity (){
-        return Native3DRigidBody.getGravity(getNative());
-    }
-
-    public float[] getLinearVelocity (){
-        return Native3DRigidBody.getLinearVelocity(getNative());
-    }
-
-    public float[] getAngularVelocity (){
-        return Native3DRigidBody.getAngularVelocity(getNative());
-    }
-
-    public float[] getAngularFactor (){
-        return Native3DRigidBody.getAngularFactor(getNative());
-    }
-
-    public float[] getLinearFactor (){
-        return Native3DRigidBody.getLinearFactor(getNative());
-    }
-
-    public float[] getDamping (){
-        return Native3DRigidBody.getDamping(getNative());
-    }
-
-    public  float getFriction (){
-        return Native3DRigidBody.getFriction(getNative());
-    }
-
-    public  float getRestitution (){
-        return Native3DRigidBody.getRestitution(getNative());
-    }
-
-    public  float getCcdMotionThreshold (){
-        return Native3DRigidBody.getCcdMotionThreshold(getNative());
-    }
-
-    public  float getContactProcessingThreshold (){
-        return Native3DRigidBody.getContactProcessingThreshold(getNative());
-    }
-
-    @Override
-    public void onLoaded() {
-
-    }
-
-    @Override
-    public void onAfterInit() {
-
-    }
-
-    @Override
-    public void onStep() {
-
+        if (world != null) {
+            world.removeBody(this);
+        }
     }
 
     private static GVRWorld getWorld(GVRSceneObject owner) {
@@ -420,47 +458,47 @@ class Native3DRigidBody {
 
     static native void setScale(long jrigid_body, float x, float y, float z);
 
-    static native void setGravity (long jrigid_body, float x, float y, float z);
+    static native void setGravity(long jrigid_body, float x, float y, float z);
 
-    static native void setDamping (long jrigid_body, float linear, float angular);
+    static native void setDamping(long jrigid_body, float linear, float angular);
 
-    static native void setLinearVelocity (long jrigid_body, float x, float y, float z);
+    static native void setLinearVelocity(long jrigid_body, float x, float y, float z);
 
-    static native void setAngularVelocity (long jrigid_body, float x, float y, float z);
+    static native void setAngularVelocity(long jrigid_body, float x, float y, float z);
 
-    static native void setAngularFactor (long jrigid_body, float x, float y, float z);
+    static native void setAngularFactor(long jrigid_body, float x, float y, float z);
 
-    static native void setLinearFactor (long jrigid_body, float x, float y, float z);
+    static native void setLinearFactor(long jrigid_body, float x, float y, float z);
 
-    static native void setFriction (long jrigid_body, float n);
+    static native void setFriction(long jrigid_body, float n);
 
-    static native void setRestitution (long jrigid_body, float n);
+    static native void setRestitution(long jrigid_body, float n);
 
-    static native void setSleepingThresholds (long jrigid_body, float linear, float angular);
+    static native void setSleepingThresholds(long jrigid_body, float linear, float angular);
 
-    static native void setCcdMotionThreshold (long jrigid_body, float n);
+    static native void setCcdMotionThreshold(long jrigid_body, float n);
 
-    static native void setContactProcessingThreshold (long jrigid_body, float n);
+    static native void setContactProcessingThreshold(long jrigid_body, float n);
 
-    static native void setIgnoreCollisionCheck (long jrigid_body,  long jcollision_object, boolean ignore);
+    static native void setIgnoreCollisionCheck(long jrigid_body,  long jcollision_object, boolean ignore);
 
-    static native float[] getGravity (long jrigid_body);
+    static native float[] getGravity(long jrigid_body);
 
-    static native float[] getLinearVelocity (long jrigid_body);
+    static native float[] getLinearVelocity(long jrigid_body);
 
-    static native float[] getAngularVelocity (long jrigid_body);
+    static native float[] getAngularVelocity(long jrigid_body);
 
-    static native float[] getAngularFactor (long jrigid_body);
+    static native float[] getAngularFactor(long jrigid_body);
 
-    static native float[] getLinearFactor (long jrigid_body);
+    static native float[] getLinearFactor(long jrigid_body);
 
-    static native float[] getDamping (long jrigid_body);
+    static native float[] getDamping(long jrigid_body);
 
-    static native  float getFriction (long jrigid_body);
+    static native  float getFriction(long jrigid_body);
 
-    static native  float getRestitution (long jrigid_body);
+    static native  float getRestitution(long jrigid_body);
 
-    static native  float getCcdMotionThreshold (long jrigid_body);
+    static native  float getCcdMotionThreshold(long jrigid_body);
 
-    static native  float getContactProcessingThreshold (long jrigid_body);
+    static native  float getContactProcessingThreshold(long jrigid_body);
 }
