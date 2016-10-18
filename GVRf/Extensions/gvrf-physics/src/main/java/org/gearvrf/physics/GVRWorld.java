@@ -19,6 +19,7 @@ import org.gearvrf.GVRBehavior;
 import org.gearvrf.GVRContext;
 import org.gearvrf.GVRSceneObject;
 import org.gearvrf.ISceneObjectEvents;
+import org.gearvrf.utility.Log;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -62,13 +63,14 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
     @Override
     public void onDrawFrame(float frameTime) {
         NativePhysics3DWorld.step(getNative(), frameTime);
+
         generateCollisionEvents();
     }
 
     private void generateCollisionEvents(){
-        LinkedList <GVRCollisionInfo> collisionInfos = new LinkedList<GVRCollisionInfo>();
+        GVRCollisionInfo collisionInfos[] = NativePhysics3DWorld.listCollisions(getNative());
 
-        if (!NativePhysics3DWorld.listCollisions(getNative(), collisionInfos)){
+        if (collisionInfos == null || collisionInfos.length <= 0){
             return;
         }
 
@@ -88,15 +90,21 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents {
             sendCollisionEvent ( cp , eventName );
         }
 
-        mPreviousCollisions = collisionInfos;
+        mPreviousCollisions.clear();
+        for ( GVRCollisionInfo info : collisionInfos ){
+            mPreviousCollisions.add( info );
+        }
     }
 
     private void sendCollisionEvent(GVRCollisionInfo info, String eventName) {
-        GVRSceneObject bodyA = mRigidBodies.get(info.bodyA).getOwnerObject();
-        GVRSceneObject bodyB = mRigidBodies.get(info.bodyB).getOwnerObject();
+        GVRSceneObject bodyA = mRigidBodies.get( info.bodyA ).getOwnerObject();
+        GVRSceneObject bodyB = mRigidBodies.get( info.bodyB ).getOwnerObject();
 
-        getGVRContext().getEventManager().sendEvent(bodyA, ICollisionEvents.class, eventName,
-                bodyA, bodyB, info.normal, info.distance);
+        getGVRContext().getEventManager().sendEvent( bodyA , ICollisionEvents.class , eventName ,
+                bodyA , bodyB , info.normal , info.distance );
+
+        getGVRContext().getEventManager().sendEvent( bodyB , ICollisionEvents.class , eventName ,
+                bodyB , bodyA , info.normal , info.distance );
     }
 
     @Override
@@ -162,5 +170,5 @@ class NativePhysics3DWorld {
 
     static native void step(long jphysics_world, float jtime_step);
 
-    static native boolean listCollisions(long jphysics_world, Object jnewlist);
+    static native GVRCollisionInfo[] listCollisions(long jphysics_world);
 }

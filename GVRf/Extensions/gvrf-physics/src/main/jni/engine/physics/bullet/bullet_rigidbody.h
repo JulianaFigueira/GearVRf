@@ -52,8 +52,6 @@ public:
     void onAttach();
     void onDetach();
 
-	bool checkCollideWith(const PhysicsRigidBody* physicsRigidBody );
-
 	float center_x() const;
     float center_y() const;
     float center_z() const;

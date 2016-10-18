@@ -101,7 +101,7 @@ void BulletWorld::listCollisions(std::vector<ContactPoint>& contactPoints) {
         contactPt.distance = contactManifold->getContactPoint(0).getDistance();
 
         contactPoints.push_back(contactPt);
-        //TODO bullet_manifold with more atributes
+        //TODO more collision atributes
     }
 
 }

@@ -50,10 +50,6 @@ extern "C" {
     Java_org_gearvrf_physics_Native3DRigidBody_onDetach(JNIEnv * env, jobject obj,
             jlong jrigid_body);
 
-    JNIEXPORT bool JNICALL
-    Java_org_gearvrf_physics_Native3DRigidBody_checkCollideWith(JNIEnv * env, jobject obj,
-        jlong jrigid_body1, jlong jrigid_body2);
-
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DRigidBody_getCenterX(JNIEnv * env, jobject obj,
             jlong jrigid_body);
@@ -251,15 +247,6 @@ Java_org_gearvrf_physics_Native3DRigidBody_onDetach(JNIEnv * env, jobject obj,
     BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
 
     rigid_body->onDetach();
-}
-
-JNIEXPORT bool JNICALL
-Java_org_gearvrf_physics_Native3DRigidBody_checkCollideWith(JNIEnv * env, jobject obj,
-        jlong jrigid_body1, jlong jrigid_body2){
-    BulletRigidBody* rigid_body1 = reinterpret_cast<BulletRigidBody*>(jrigid_body1);
-    BulletRigidBody* rigid_body2 = reinterpret_cast<BulletRigidBody*>(jrigid_body2);
-
-    return rigid_body1->checkCollideWith(rigid_body2);
 }
 
 JNIEXPORT jfloat JNICALL
