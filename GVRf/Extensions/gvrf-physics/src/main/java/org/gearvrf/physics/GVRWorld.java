@@ -68,7 +68,14 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents, Compone
      */
     public void addBody(GVRRigidBody gvrBody) {
         if (!contains(gvrBody)) {
+
+            if(!gvrBody.hasCollisionFilter())
             NativePhysics3DWorld.addRigidBody(getNative(), gvrBody.getNative());
+            else
+            {
+                NativePhysics3DWorld.addRigidBodyWithMask(getNative(), gvrBody.getNative(), gvrBody.mCollisionTypeID, gvrBody.mCollisionMask);
+            }
+
             mRigidBodies.put(gvrBody.getNative(), gvrBody);
         }
     }
@@ -212,6 +219,8 @@ class NativePhysics3DWorld {
     static native long getComponentType();
 
     static native boolean addRigidBody(long jphysics_world, long jrigid_body);
+
+    static native boolean addRigidBodyWithMask(long jphysics_world, long jrigid_body, long collisionType, long collidesWith);
 
     static native void removeRigidBody(long jphysics_world, long jrigid_body);
 

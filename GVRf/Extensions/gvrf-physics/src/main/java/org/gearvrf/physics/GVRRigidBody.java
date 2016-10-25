@@ -37,13 +37,17 @@ public class GVRRigidBody extends GVRComponent {
         System.loadLibrary("gvrf-physics");
     }
 
+    protected final short mCollisionMask;
+    protected final short mCollisionTypeID;
+
     public GVRRigidBody(GVRContext gvrContext) {
-        this(gvrContext, 0.0f);
+        this(gvrContext, 0.0f, Short.MAX_VALUE, Short.MIN_VALUE);
     }
 
-    public GVRRigidBody(GVRContext gvrContext, float mass) {
+    public GVRRigidBody(GVRContext gvrContext, float mass, short collisionTypeID, short collideWith) {
         super(gvrContext, Native3DRigidBody.ctor());
-
+        this.mCollisionTypeID = collisionTypeID;
+        this.mCollisionMask = collideWith;
         Native3DRigidBody.setMass(getNative(), mass);
     }
 
@@ -405,6 +409,13 @@ public class GVRRigidBody extends GVRComponent {
         if (world != null) {
             world.removeBody(this);
         }
+    }
+
+    protected boolean hasCollisionFilter() {
+        if(mCollisionMask == Short.MIN_VALUE && mCollisionTypeID == Short.MAX_VALUE)
+            return false;
+        else
+            return true;
     }
 }
 
