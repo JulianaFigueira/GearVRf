@@ -41,10 +41,16 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents, Compone
 
     private final LongSparseArray<GVRRigidBody> mRigidBodies = new LongSparseArray<GVRRigidBody>();
     private final LinkedList<GVRCollisionInfo> mPreviousCollisions = new LinkedList<GVRCollisionInfo>();
+    private final GVRCollisionMatrix mCollisionMatrix;
 
     public GVRWorld(GVRContext gvrContext) {
+        this(gvrContext, null);
+    }
+
+    public GVRWorld(GVRContext gvrContext, GVRCollisionMatrix collisionMatrix) {
         super(gvrContext, NativePhysics3DWorld.ctor());
         mHasFrameCallback = false;
+        mCollisionMatrix = collisionMatrix;
     }
 
     static public long getComponentType() {
@@ -67,17 +73,20 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents, Compone
      * @param gvrBody The {@link GVRRigidBody} to add.
      */
     public void addBody(GVRRigidBody gvrBody) {
-        if (!contains(gvrBody)) {
-
-            if(!gvrBody.hasCollisionFilter())
-            NativePhysics3DWorld.addRigidBody(getNative(), gvrBody.getNative());
-            else
-            {
-                NativePhysics3DWorld.addRigidBodyWithMask(getNative(), gvrBody.getNative(), gvrBody.mCollisionTypeID, gvrBody.mCollisionMask);
-            }
-
-            mRigidBodies.put(gvrBody.getNative(), gvrBody);
+        if (contains(gvrBody)) {
+            return;
         }
+
+        if (gvrBody.getCollisionGroup() < 0 || gvrBody.getCollisionGroup() > 15
+                || mCollisionMatrix == null) {
+            NativePhysics3DWorld.addRigidBody(getNative(), gvrBody.getNative());
+        } else {
+            NativePhysics3DWorld.addRigidBodyWithMask(getNative(), gvrBody.getNative(),
+                    mCollisionMatrix.getCollisionFilterGroup(gvrBody.getCollisionGroup()),
+                    mCollisionMatrix.getCollisionFilterMask(gvrBody.getCollisionGroup()));
+        }
+
+        mRigidBodies.put(gvrBody.getNative(), gvrBody);
     }
 
     /**

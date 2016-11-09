@@ -37,18 +37,40 @@ public class GVRRigidBody extends GVRComponent {
         System.loadLibrary("gvrf-physics");
     }
 
-    protected final short mCollisionMask;
-    protected final short mCollisionTypeID;
+    private final int mCollisionGroup;
 
+    /**
+     * Constructs new instance to simulate a rigid body in {@link GVRWorld}.
+     *
+     * @param gvrContext The context of the app.
+     */
     public GVRRigidBody(GVRContext gvrContext) {
-        this(gvrContext, 0.0f, Short.MAX_VALUE, Short.MIN_VALUE);
+        this(gvrContext, 0.0f);
     }
 
-    public GVRRigidBody(GVRContext gvrContext, float mass, short collisionTypeID, short collideWith) {
+    /**
+     * Constructs new instance to simulate a rigid body in {@link GVRWorld}.
+     *
+     * @param gvrContext The context of the app.
+     * @param mass The mass of this rigid body.
+     */
+    public GVRRigidBody(GVRContext gvrContext, float mass) {
+        this(gvrContext, mass, -1);
+    }
+
+    /**
+     * Constructs new instance to simulate a rigid body in {@link GVRWorld}.
+     *
+     * @param gvrContext The context of the app.
+     * @param mass The mass of this rigid body.
+     * @param collisionGroup The id of the collision's group that this rigid body belongs to
+     *                       in the {@link GVRCollisionMatrix}. The rigid body collides with
+     *                       everyone if {#collisionGroup} is out of the range 0...15.
+     */
+    public GVRRigidBody(GVRContext gvrContext, float mass, int collisionGroup) {
         super(gvrContext, Native3DRigidBody.ctor());
-        this.mCollisionTypeID = collisionTypeID;
-        this.mCollisionMask = collideWith;
         Native3DRigidBody.setMass(getNative(), mass);
+        mCollisionGroup = collisionGroup;
     }
 
     static public long getComponentType() {
@@ -337,6 +359,10 @@ public class GVRRigidBody extends GVRComponent {
         Native3DRigidBody.setContactProcessingThreshold(getNative(), n);
     }
 
+    public int getCollisionGroup() {
+        return mCollisionGroup;
+    }
+
     @Override
     public void onAttach(GVRSceneObject newOwner) {
         super.onAttach(newOwner);
@@ -409,13 +435,6 @@ public class GVRRigidBody extends GVRComponent {
         if (world != null) {
             world.removeBody(this);
         }
-    }
-
-    protected boolean hasCollisionFilter() {
-        if(mCollisionMask == Short.MIN_VALUE && mCollisionTypeID == Short.MAX_VALUE)
-            return false;
-        else
-            return true;
     }
 }
 
