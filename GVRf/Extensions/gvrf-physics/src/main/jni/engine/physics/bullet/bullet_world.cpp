@@ -86,14 +86,18 @@ void BulletWorld::step(float timeStep) {
     mPhysicsWorld->stepSimulation(timeStep);
 }
 
-void BulletWorld::listCollisions(std::vector <ContactPoint> &contactPoints) {
+void BulletWorld::listCollisions(std::list <ContactPoint> &contactPoints) {
+
+    //ALL CURRENT COLLISIONS EVENTS -------------------------------------------------------------------
+    std::map<std::pair<long,long>, ContactPoint> currCollisions;
     int numManifolds = mPhysicsWorld->getDispatcher()->getNumManifolds();
+    btPersistentManifold *contactManifold;
 
     for (int i = 0; i < numManifolds; i++) {
         ContactPoint contactPt;
 
-        btPersistentManifold *contactManifold = mPhysicsWorld->getDispatcher()->getManifoldByIndexInternal(
-                i);
+        contactManifold = mPhysicsWorld->getDispatcher()->
+                getManifoldByIndexInternal(i);
 
         contactPt.body0 = (BulletRigidBody *) (contactManifold->getBody0()->getUserPointer());
         contactPt.body1 = (BulletRigidBody *) (contactManifold->getBody1()->getUserPointer());
@@ -101,10 +105,36 @@ void BulletWorld::listCollisions(std::vector <ContactPoint> &contactPoints) {
         contactPt.normal[1] = contactManifold->getContactPoint(0).m_normalWorldOnB.getY();
         contactPt.normal[2] = contactManifold->getContactPoint(0).m_normalWorldOnB.getZ();
         contactPt.distance = contactManifold->getContactPoint(0).getDistance();
+        contactPt.isHit = true;
 
-        contactPoints.push_back(contactPt);
-        //TODO more collision atributes
+        std::pair<long, long> collisionPair((long)contactPt.body0, (long)contactPt.body1);
+        std::pair<std::pair<long, long>, ContactPoint> newPair(collisionPair, contactPt);
+        currCollisions.insert(newPair);
+
+        //is new hit: is NOT on prev list + is on curr list
+        if (prevCollisions.find(collisionPair) == prevCollisions.end()) {
+            contactPoints.push_front(contactPt); //ONENTER EVENT
+        }
+        contactManifold = 0;
     }
+
+    //COMPARE WITH OLD------------------------------------------------------------------------------
+
+    for (auto it = prevCollisions.begin(); it != prevCollisions.end(); ++it) {
+        //is not hit: is on prev list + is not on currlist
+        if (currCollisions.find(it->first) == currCollisions.end()) {
+            ContactPoint cp = it->second;
+            cp.isHit = false;
+            contactPoints.push_back(cp); //ONEXIT EVENT
+        } else {
+            //is hitting: is on prev list + is on currList
+            //HITTING EVENT
+        }
+    }
+
+    prevCollisions.clear();
+    prevCollisions.swap(currCollisions);
+
 }
 
 void BulletWorld::addRigidBody(PhysicsRigidBody *body, int collisiontype, int collidesWith) {
