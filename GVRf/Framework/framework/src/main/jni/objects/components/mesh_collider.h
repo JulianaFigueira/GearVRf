@@ -23,6 +23,8 @@
 
 #include <memory>
 
+#include "objects/scene_object.h"
+#include "render_data.h"
 #include "collider.h"
 
 namespace gvr {
@@ -41,7 +43,18 @@ public:
     }
 
     Mesh* mesh() const {
-        return mesh_;
+        if (mesh_) {
+            return mesh_;
+        }
+        SceneObject* owner = owner_object();
+        if (owner == nullptr) {
+            return nullptr;
+        }
+        RenderData* rdata = owner->render_data();
+        if (rdata == nullptr) {
+            return nullptr;
+        }
+        return rdata->mesh();
     }
 
     void set_mesh(Mesh* mesh) {
