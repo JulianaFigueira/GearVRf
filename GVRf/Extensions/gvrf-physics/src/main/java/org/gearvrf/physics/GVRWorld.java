@@ -121,8 +121,8 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents, Compone
         if (mIsProcessing) {
             return;
         }
+        mIsProcessing = true;
         NativePhysics3DWorld.step(getNative(), mFrameTime);
-
         generateCollisionEvents();
         mFrameTime = 0.0f;
         mIsProcessing = false;
