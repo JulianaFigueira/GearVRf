@@ -148,6 +148,7 @@ private:
     btRigidBody *mRigidBody;
     btRigidBody::btRigidBodyConstructionInfo mConstructionInfo;
     btTransform m_centerOfMassOffset;
+    btTransform prevPos;
     btVector3 mScale;
     SimulationType mSimType;
 };
