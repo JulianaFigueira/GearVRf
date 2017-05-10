@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "../bullet/bullet_fixedconstraint.h"
+#include "../../bullet/bullet_fixedconstraint.h"
 #include <mutex>
 #include "glm/gtc/type_ptr.hpp"
 #include "util/gvr_jni.h"
@@ -21,7 +21,7 @@
 namespace gvr {
     extern "C" {
     JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj);
+    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj, jlong rigidBodyB);
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DFixedConstraint_getComponentType(JNIEnv * env, jobject obj);
@@ -30,8 +30,8 @@ namespace gvr {
     }
 
     JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj) {
-        return reinterpret_cast<jlong>(new BulletRigidBody());
+    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj, jlong rigidBodyB, jlong world) {
+        return reinterpret_cast<jlong>(new BulletFixedConstraint(reinterpret_cast<BulletRigidBody*>(rigidBodyB)));
     }
 
     JNIEXPORT jlong JNICALL

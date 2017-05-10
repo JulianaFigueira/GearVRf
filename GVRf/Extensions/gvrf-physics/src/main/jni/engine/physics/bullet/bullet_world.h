@@ -20,8 +20,9 @@
 #ifndef BULLET_WORLD_H_
 #define BULLET_WORLD_H_
 
+#include "../physics_rigidbody.h"
+#include "../physics_constraint.h"
 #include "../physics3d/physics_3dworld.h"
-
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 
@@ -36,6 +37,10 @@ class BulletWorld : public Physics3DWorld {
     BulletWorld();
 
     ~BulletWorld();
+
+    void addConstraint(PhysicsConstraint *constraint);
+
+    void removeConstraint(PhysicsConstraint *constraint);
 
     void addRigidBody(PhysicsRigidBody *body);
 

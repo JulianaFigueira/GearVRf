@@ -75,6 +75,14 @@ void BulletWorld::finalize() {
     delete mCollisionConfiguration;
 }
 
+void BulletWorld::addConstraint(PhysicsConstraint *constraint) {
+    mPhysicsWorld->addConstraint(constraint->getConstraint());
+}
+
+void BulletWorld::removeConstraint(PhysicsConstraint *constraint) {
+    mPhysicsWorld->removeConstraint(constraint->getConstraint());
+}
+
 void BulletWorld::addRigidBody(PhysicsRigidBody *body) {
     mPhysicsWorld->addRigidBody((static_cast<BulletRigidBody *>(body))->getRigidBody());
 }

@@ -24,9 +24,6 @@ import org.gearvrf.GVRSceneObject;
 import org.gearvrf.GVRSceneObject.ComponentVisitor;
 import org.gearvrf.ISceneObjectEvents;
 
-import java.util.Collections;
-import java.util.LinkedList;
-
 /**
  * Represents a physics world where all {@link GVRSceneObject} with {@link GVRRigidBody} component
  * attached to are simulated.
@@ -69,6 +66,25 @@ public class GVRWorld extends GVRBehavior implements ISceneObjectEvents, Compone
 
     static public long getComponentType() {
         return NativePhysics3DWorld.getComponentType();
+    }
+
+
+    /**
+     * Add a {@link GVRConstraint} to this physics world.
+     *
+     * @param gvrConstraint The {@link GVRConstraint} to add.
+     */
+    public void addConstraint(GVRConstraint gvrConstraint) {
+        NativePhysics3DWorld.addConstraint(getNative(), gvrConstraint.getNative());
+    }
+
+    /**
+     * Remove a {@link GVRFixedConstraint} from this physics world.
+     *
+     * @param gvrConstraint the {@link GVRFixedConstraint} to remove.
+     */
+    public void removeConstraint(GVRConstraint gvrConstraint) {
+        NativePhysics3DWorld.removeConstraint(getNative(), gvrConstraint.getNative());
     }
 
     /**
@@ -247,6 +263,10 @@ class NativePhysics3DWorld {
     static native long ctor();
 
     static native long getComponentType();
+
+    static native boolean addConstraint(long jphysics_world, long jconstraint);
+
+    static native boolean removeConstraint(long jphysics_world, long jconstraint);
 
     static native boolean addRigidBody(long jphysics_world, long jrigid_body);
 

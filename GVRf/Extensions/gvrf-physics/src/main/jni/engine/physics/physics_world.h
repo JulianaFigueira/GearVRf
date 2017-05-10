@@ -21,6 +21,7 @@
 #define PHYSICS_WORLD_H_
 
 #include "physics_rigidbody.h"
+#include "physics_constraint.h"
 #include "../objects/scene_object.h"
 #include <list>
 
@@ -41,6 +42,10 @@ class PhysicsWorld : public Component {
 	static long long getComponentType() {
 	        return COMPONENT_TYPE_PHYSICS_WORLD;
 	}
+
+	void addConstraint(PhysicsConstraint *constraint);
+
+	void removeConstraint(PhysicsConstraint *constraint);
 
 	void addRigidBody(PhysicsRigidBody *body);
 

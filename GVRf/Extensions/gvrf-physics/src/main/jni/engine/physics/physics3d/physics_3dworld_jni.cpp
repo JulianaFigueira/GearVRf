@@ -19,6 +19,7 @@
 
 #include "../bullet/bullet_world.h"
 #include "../bullet/bullet_rigidbody.h"
+#include "../physics_constraint.h"
 
 #include "util/gvr_jni.h"
 
@@ -30,6 +31,14 @@ extern "C" {
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_NativePhysics3DWorld_getComponentType(JNIEnv * env, jobject obj);
+
+    JNIEXPORT void JNICALL
+    Java_org_gearvrf_physics_NativePhysics3DWorld_addConstraint(JNIEnv * env, jobject obj,
+                                                           jlong jworld, jlong jconstraint);
+
+    JNIEXPORT void JNICALL
+    Java_org_gearvrf_physics_NativePhysics3DWorld_removeConstraint(JNIEnv * env, jobject obj,
+                                                            jlong jworld, jlong jconstraint);
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,
@@ -68,6 +77,26 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_ctor(JNIEnv * env, jobject obj) {
 JNIEXPORT jlong JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_getComponentType(JNIEnv * env, jobject obj) {
     return BulletWorld::getComponentType();
+}
+
+JNIEXPORT void JNICALL
+Java_org_gearvrf_physics_NativePhysics3DWorld_addConstraint(JNIEnv * env, jobject obj,
+                                                            jlong jworld, jlong jconstraint) {
+    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
+    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
+    PhysicsConstraint* constraint = reinterpret_cast<PhysicsConstraint*>(jconstraint);
+
+    world->addConstraint(constraint);
+}
+
+JNIEXPORT void JNICALL
+Java_org_gearvrf_physics_NativePhysics3DWorld_removeConstraint(JNIEnv * env, jobject obj,
+                                                            jlong jworld, jlong jconstraint) {
+    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
+    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
+    PhysicsConstraint* constraint = reinterpret_cast<PhysicsConstraint*>(jconstraint);
+
+    world->removeConstraint(constraint);
 }
 
 JNIEXPORT void JNICALL
