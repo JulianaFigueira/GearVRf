@@ -76,11 +76,11 @@ void BulletWorld::finalize() {
 }
 
 void BulletWorld::addConstraint(PhysicsConstraint *constraint) {
-    mPhysicsWorld->addConstraint(constraint->getConstraint());
+    mPhysicsWorld->addConstraint((btTypedConstraint*)constraint->getConstraint());
 }
 
 void BulletWorld::removeConstraint(PhysicsConstraint *constraint) {
-    mPhysicsWorld->removeConstraint(constraint->getConstraint());
+    mPhysicsWorld->removeConstraint((btTypedConstraint*)constraint->getConstraint());
 }
 
 void BulletWorld::addRigidBody(PhysicsRigidBody *body) {

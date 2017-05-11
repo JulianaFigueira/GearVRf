@@ -10,7 +10,7 @@ namespace gvr {
         this->mRigidBodyB = rigidBodyB;
     };
 
-    virtual BulletFixedConstraint::~BulletFixedConstraint() {
+    BulletFixedConstraint::~BulletFixedConstraint() {
         delete mFixedConstraint;
     };
 

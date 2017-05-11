@@ -15,7 +15,6 @@
 
 package org.gearvrf.physics;
 
-import org.gearvrf.GVRCollider;
 import org.gearvrf.GVRComponent;
 import org.gearvrf.GVRContext;
 import org.gearvrf.GVRSceneObject;
@@ -33,7 +32,7 @@ import org.gearvrf.GVRSceneObject;
  * You must setup the values of owner's {@link org.gearvrf.GVRTransform}, like initial position,
  * and the mass value of the rigid body before attach it to its owner.
  */
-public class GVRRigidBody extends GVRComponent {
+public class GVRRigidBody extends GVRPhysicsWorldObject {
     public static final int DYNAMIC  = 0;
     public static final int STATIC = 1;
     public static final int KINEMATIC = 2;
@@ -418,55 +417,17 @@ public class GVRRigidBody extends GVRComponent {
             throw new UnsupportedOperationException("You must have a mesh attached to the scene object before attaching the rigid body");
         }
         super.onAttach(newOwner);
-        if (isEnabled()) {
-            addToWorld(getWorld(newOwner));
-        }
     }
 
     @Override
-    public void onDetach(GVRSceneObject oldOwner) {
-        super.onDetach(oldOwner);
-        if (isEnabled()) {
-            removeFromWorld(getWorld(oldOwner));
-        }
-    }
-
-    @Override
-    public void onNewOwnersParent(GVRSceneObject newOwnersParent) {
-        if (isEnabled()) {
-            addToWorld(getWorld(newOwnersParent));
-        }
-    }
-
-    @Override
-    public void onRemoveOwnersParent(GVRSceneObject oldOwnersParent) {
-        if (isEnabled()) {
-            removeFromWorld(getWorld(oldOwnersParent));
-        }
-    }
-
-    @Override
-    public void onEnable() {
-        super.onEnable();
-
-        addToWorld(getWorld());
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-
-        removeFromWorld(getWorld());
-    }
-
-
-    private void addToWorld(GVRWorld world) {
+    protected void addToWorld(GVRWorld world) {
         if (world != null) {
             world.addBody(this);
         }
     }
 
-    private void removeFromWorld(GVRWorld world) {
+    @Override
+    protected void removeFromWorld(GVRWorld world) {
         if (world != null) {
             world.removeBody(this);
         }

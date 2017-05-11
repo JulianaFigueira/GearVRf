@@ -26,11 +26,10 @@ namespace gvr {
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DFixedConstraint_getComponentType(JNIEnv * env, jobject obj);
 
-
     }
 
     JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj, jlong rigidBodyB, jlong world) {
+    Java_org_gearvrf_physics_Native3DFixedConstraint_ctor(JNIEnv * env, jobject obj, jlong rigidBodyB) {
         return reinterpret_cast<jlong>(new BulletFixedConstraint(reinterpret_cast<BulletRigidBody*>(rigidBodyB)));
     }
 

@@ -33,7 +33,7 @@ namespace gvr {
 
         virtual void set_owner_object(SceneObject* obj);
 
-        virtual btTypedConstraint* getConstraint() const {
+        virtual void* getConstraint() const {
             return this->mFixedConstraint;
         }
 
