@@ -29,7 +29,7 @@ namespace gvr {
     void BulletFixedConstraint::onAttach(SceneObject* owner) {
         btRigidBody* rbA = ((BulletRigidBody*)this->owner_object()->getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
 
-        this->mFixedConstraint = new btFixedConstraint(*rbA, *mRigidBodyB->getRigidBody(), rbA->getWorldTransform(), mRigidBodyB->getRigidBody()->getWorldTransform());
+        this->mFixedConstraint = new btFixedConstraint(*rbA, *mRigidBodyB->getRigidBody(), mRigidBodyB->getRigidBody()->getWorldTransform(), rbA->getWorldTransform());
     }
 
 }

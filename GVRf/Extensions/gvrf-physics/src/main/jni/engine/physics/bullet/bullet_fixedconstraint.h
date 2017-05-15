@@ -33,7 +33,7 @@ namespace gvr {
 
         virtual void set_owner_object(SceneObject* obj);
 
-        virtual void* getConstraint() const {
+        virtual void* getConstraint() {
             return this->mFixedConstraint;
         }
 

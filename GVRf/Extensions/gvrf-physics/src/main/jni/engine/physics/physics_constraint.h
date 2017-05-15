@@ -36,12 +36,12 @@ namespace gvr {
             return COMPONENT_TYPE_PHYSICS_CONSTRAINT;
         }
 
-//        virtual float getAppliedImpulse() const = 0;
-//        virtual float getBreakingImpulseThreshold() const = 0;
-//        virtual void setBreakingImpulseThreshold(float n) = 0;
-//        virtual void getJointFeedback(JointFeedback* feedback) const = 0;
-//        virtual void setJointFeedback(JointFeedback* feedback) = 0;
-        virtual void* getConstraint() const = 0;
+    //virtual float getAppliedImpulse() const = 0;
+    //virtual float getBreakingImpulseThreshold() const = 0;
+    //virtual void setBreakingImpulseThreshold(float n) = 0;
+    //virtual void getJointFeedback(JointFeedback* feedback) = 0;
+    //virtual void setJointFeedback(JointFeedback const * feedback) = 0;
+        virtual void* getConstraint() = 0;
 
     };
 
