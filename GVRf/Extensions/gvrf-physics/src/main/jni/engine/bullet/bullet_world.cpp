@@ -15,14 +15,20 @@
 #include <algorithm>
 #include "bullet_world.h"
 #include "bullet_rigidbody.h"
+#include "bullet_constraint.h"
 #include "util/gvr_log.h"
 
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
+#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
+#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
+
+#include <android/log.h>
+
 namespace gvr {
-std::mutex BulletWorld::sLock;
+std::mutex BulletWorld::worldLock;
 
 BulletWorld::BulletWorld() {
     initialize();
@@ -76,29 +82,35 @@ void BulletWorld::finalize() {
 }
 
 void BulletWorld::addConstraint(PhysicsConstraint *constraint) {
-    mPhysicsWorld->addConstraint((btTypedConstraint*)constraint->getConstraint());
+    std::lock_guard<std::mutex> lock(worldLock);
+    btTypedConstraint *_constr = reinterpret_cast<btTypedConstraint*>(constraint->getUnderlying());
+    mPhysicsWorld->addConstraint(_constr);
 }
 
 void BulletWorld::removeConstraint(PhysicsConstraint *constraint) {
-    mPhysicsWorld->removeConstraint((btTypedConstraint*)constraint->getConstraint());
+    std::lock_guard<std::mutex> lock(worldLock);
+    mPhysicsWorld->removeConstraint(reinterpret_cast<btTypedConstraint*>(constraint->getUnderlying()));
 }
 
 void BulletWorld::addRigidBody(PhysicsRigidBody *body) {
-    mPhysicsWorld->addRigidBody((static_cast<BulletRigidBody *>(body))->getRigidBody());
+    std::lock_guard<std::mutex> lock(worldLock);
+    btRigidBody *b = (static_cast<BulletRigidBody *>(body))->getRigidBody();
+    mPhysicsWorld->addRigidBody(b);
 }
 
 void BulletWorld::addRigidBody(PhysicsRigidBody *body, int collisiontype, int collidesWith) {
+    std::lock_guard<std::mutex> lock(worldLock);
     mPhysicsWorld->addRigidBody((static_cast<BulletRigidBody *>(body))->getRigidBody(),
                                 collidesWith, collisiontype);
-
 }
 
 void BulletWorld::removeRigidBody(PhysicsRigidBody *body) {
+    std::lock_guard<std::mutex> lock(worldLock);
     mPhysicsWorld->removeRigidBody((static_cast<BulletRigidBody *>(body))->getRigidBody());
 }
 
 void BulletWorld::step(float timeStep) {
-    std::lock_guard<std::mutex> lock(sLock);
+    std::lock_guard<std::mutex> lock(worldLock);
     mPhysicsWorld->stepSimulation(timeStep);
 }
 
@@ -174,10 +186,17 @@ void BulletWorld::setGravity(glm::vec3 gravity) {
     mPhysicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 }
 
-glm::vec3 BulletWorld::getGravity() {
+PhysicsVec3 BulletWorld::getGravity() const
+{
     btVector3 g = mPhysicsWorld->getGravity();
-    glm::vec3 v(g.getX(), g.getY(), g.getZ());
-    return v;
+
+    PhysicsVec3 gravity;
+    gravity.x = g.getX();
+    gravity.y = g.getY();
+    gravity.z = g.getZ();
+
+    return gravity;
 }
+
 }
 

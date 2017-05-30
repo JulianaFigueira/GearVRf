@@ -17,9 +17,10 @@
  * Represents a physics 3D world
  ***************************************************************************/
 
-#include "../bullet/bullet_world.h"
-#include "../bullet/bullet_rigidbody.h"
-#include "../physics_constraint.h"
+#include "bullet/bullet_world.h"
+#include "physics_world.h"
+#include "physics_rigidbody.h"
+#include "physics_constraint.h"
 
 #include "util/gvr_jni.h"
 
@@ -76,14 +77,13 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_ctor(JNIEnv * env, jobject obj) {
 
 JNIEXPORT jlong JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_getComponentType(JNIEnv * env, jobject obj) {
-    return BulletWorld::getComponentType();
+    return PhysicsWorld::getComponentType();
 }
 
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_addConstraint(JNIEnv * env, jobject obj,
                                                             jlong jworld, jlong jconstraint) {
-    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
     PhysicsConstraint* constraint = reinterpret_cast<PhysicsConstraint*>(jconstraint);
 
     world->addConstraint(constraint);
@@ -92,8 +92,7 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_addConstraint(JNIEnv * env, jobjec
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_removeConstraint(JNIEnv * env, jobject obj,
                                                             jlong jworld, jlong jconstraint) {
-    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
     PhysicsConstraint* constraint = reinterpret_cast<PhysicsConstraint*>(jconstraint);
 
     world->removeConstraint(constraint);
@@ -102,9 +101,8 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_removeConstraint(JNIEnv * env, job
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject obj,
         jlong jworld, jlong jrigid_body) {
-    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
-    BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
+    PhysicsRigidBody* rigid_body = reinterpret_cast<PhysicsRigidBody*>(jrigid_body);
 
     world->addRigidBody(rigid_body);
 }
@@ -112,9 +110,8 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBody(JNIEnv * env, jobject
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBodyWithMask(JNIEnv * env, jobject obj,
         jlong jworld, jlong jrigid_body, jlong collisionType, jlong collidesWith) {
-    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
-    BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
+    PhysicsRigidBody* rigid_body = reinterpret_cast<PhysicsRigidBody*>(jrigid_body);
 
     world->addRigidBody(rigid_body, collisionType, collidesWith);
 }
@@ -122,9 +119,8 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_addRigidBodyWithMask(JNIEnv * env,
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_removeRigidBody(JNIEnv * env, jobject obj,
         jlong jworld, jlong jrigid_body) {
-    std::lock_guard<std::mutex> lock(BulletWorld::getLock());
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
-    BulletRigidBody* rigid_body = reinterpret_cast<BulletRigidBody*>(jrigid_body);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
+    PhysicsRigidBody* rigid_body = reinterpret_cast<PhysicsRigidBody*>(jrigid_body);
 
     world->removeRigidBody(rigid_body);
 }
@@ -132,7 +128,7 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_removeRigidBody(JNIEnv * env, jobj
 JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_step(JNIEnv * env, jobject obj,
         jlong jworld, jfloat jtime_step) {
-    BulletWorld *world = reinterpret_cast<BulletWorld*>(jworld);
+    PhysicsWorld *world = reinterpret_cast<PhysicsWorld*>(jworld);
 
     world->step((float)jtime_step);
 }
@@ -143,7 +139,7 @@ Java_org_gearvrf_physics_NativePhysics3DWorld_listCollisions(JNIEnv * env, jobje
     jclass collisionInfoClass = env->FindClass("org/gearvrf/physics/GVRCollisionInfo");
     jmethodID collisionInfoConstructor = env->GetMethodID(collisionInfoClass, "<init>", "(JJ[FFZ)V");
 
-    BulletWorld *world = reinterpret_cast <BulletWorld*> (jworld);
+    PhysicsWorld *world = reinterpret_cast <PhysicsWorld*> (jworld);
     std::list <ContactPoint> contactPoints;
 
     world->listCollisions(contactPoints);
@@ -176,7 +172,7 @@ JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_setGravity(JNIEnv* env, jobject obj,
         jlong jworld, float gx, float gy, float gz)
 {
-    BulletWorld* world = reinterpret_cast <BulletWorld*> (jworld);
+    PhysicsWorld* world = reinterpret_cast <PhysicsWorld*> (jworld);
     world->setGravity(gx, gy, gz);
 }
 
@@ -184,9 +180,8 @@ JNIEXPORT void JNICALL
 Java_org_gearvrf_physics_NativePhysics3DWorld_getGravity(JNIEnv* env, jobject obj,
         jlong jworld, jfloatArray jgravity)
 {
-    BulletWorld* world = reinterpret_cast <BulletWorld*> (jworld);
-    glm::vec3 gravity = world->getGravity();
-    float temp[3] = { gravity.x, gravity.y, gravity.z };
-    env->SetFloatArrayRegion(jgravity, 0, 3, temp);
+    PhysicsWorld* world = reinterpret_cast <PhysicsWorld*> (jworld);
+    PhysicsVec3 gravity = world->getGravity();
+    env->SetFloatArrayRegion(jgravity, 0, 3, gravity.vec);
 }
 }

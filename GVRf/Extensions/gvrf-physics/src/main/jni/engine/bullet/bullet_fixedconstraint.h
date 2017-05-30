@@ -17,23 +17,29 @@
 #ifndef BULLET_FIXEDCONSTRAINT_H
 #define BULLET_FIXEDCONSTRAINT_H
 
-#include "../physics3d/constraints/physics_3dfixedconstraint.h"
-#include <BulletDynamics/ConstraintSolver/btFixedConstraint.h>
+#include "../physics_fixedconstraint.h"
+#include "bullet_object.h"
+
 #include "bullet_rigidbody.h"
 #include "bullet_world.h"
 
+class btFixedConstraint;
+
 namespace gvr {
 
+    class BulletRigidBody;
 
-    class BulletFixedConstraint : public Physics3DFixedConstraint {
+    class BulletFixedConstraint : public PhysicsConstraint,
+                                         BulletObject  {
+
     public:
         BulletFixedConstraint(BulletRigidBody* rigidBodyB);
 
         ~BulletFixedConstraint();
 
-        virtual void set_owner_object(SceneObject* obj);
+        void set_owner_object(SceneObject* obj);
 
-        virtual void* getConstraint() {
+        void* getUnderlying() {
             return this->mFixedConstraint;
         }
 

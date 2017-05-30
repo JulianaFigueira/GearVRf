@@ -28,8 +28,7 @@
 namespace gvr {
 
 BulletRigidBody::BulletRigidBody()
-        : Physics3DRigidBody(),
-          mConstructionInfo(btScalar(0.0f), nullptr, new btEmptyShape()),
+        : mConstructionInfo(btScalar(0.0f), nullptr, new btEmptyShape()),
           m_centerOfMassOffset(btTransform::getIdentity()),
           mScale(1.0f, 1.0f, 1.0f),
           mSimType(SimulationType::DYNAMIC)
@@ -274,54 +273,67 @@ void  BulletRigidBody::updateColisionShapeLocalScaling() {
 
 
 void BulletRigidBody::setGravity(float x, float y, float z) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setGravity(btVector3(x, y, z));
 }
 
 void BulletRigidBody::setDamping(float linear, float angular) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setDamping(linear, angular);
 }
 
 void BulletRigidBody::setLinearVelocity(float x, float y, float z) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setLinearVelocity(btVector3(x, y, z));
 }
 
 void BulletRigidBody::setAngularVelocity(float x, float y, float z) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setAngularVelocity(btVector3(x, y, z));
 }
 
 void BulletRigidBody::setAngularFactor(float x, float y, float z) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setAngularFactor(btVector3(x, y, z));
 }
 
 void BulletRigidBody::setLinearFactor(float x, float y, float z) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setLinearFactor(btVector3(x, y, z));
 }
 
 void BulletRigidBody::setFriction(float n) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setFriction(n);
 }
 
 void BulletRigidBody::setRestitution(float n) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setRestitution(n);
 }
 
 void BulletRigidBody::setSleepingThresholds(float linear, float angular) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setSleepingThresholds(linear, angular);
 }
 
 void BulletRigidBody::setCcdMotionThreshold(float n) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setCcdMotionThreshold(n);
 }
 
 void BulletRigidBody::setCcdSweptSphereRadius(float n) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setCcdSweptSphereRadius(n);
 }
 
 void BulletRigidBody::setContactProcessingThreshold(float n) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setContactProcessingThreshold(n);
 }
 
 void BulletRigidBody::setIgnoreCollisionCheck(PhysicsRigidBody *collisionObj, bool ignore) {
+    std::lock_guard<std::mutex> lock(BulletWorld::worldLock);
     mRigidBody->setIgnoreCollisionCheck(((BulletRigidBody *) collisionObj)->getRigidBody(),
                                         ignore);
 }

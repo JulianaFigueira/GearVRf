@@ -13,19 +13,34 @@
  * limitations under the License.
  */
 
-#ifndef PHYSICS_3DPOINT2POINT_CONSTRAINT_H_
-#define PHYSICS_3DPOINT2POINT_CONSTRAINT_H_
+/***************************************************************************
+ * Represents a physics 2D or 3D world
+ ***************************************************************************/
 
-#include "../../physics_constraint.h"
+#ifndef PHYSICS_COMMON_H_
+#define PHYSICS_COMMON_H_
 
 namespace gvr {
 
-class Physics3Dpoint2pointConstraint : public PhysicsConstraint {
- public:
-    Physics3Dpoint2pointConstraint() : PhysicsConstraint() {}
-    ~Physics3Dpoint2pointConstraint(){}
-};
+    union PhysicsVec3 {
+        float vec[3];
+        struct {
+            float x, y, z;
+        };
+
+        void set(float const v[]) {
+            x = v[0];
+            y = v[1];
+            z = v[2];
+        }
+
+        void set(float x, float y, float z) {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+    };
 
 }
 
-#endif /* PHYSICS_3DPOINT2POINT_CONSTRAINT_H_ */
+#endif /* PHYSICS_COMMON_H_ */

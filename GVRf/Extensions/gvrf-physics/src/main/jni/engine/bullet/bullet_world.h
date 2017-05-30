@@ -20,19 +20,24 @@
 #ifndef BULLET_WORLD_H_
 #define BULLET_WORLD_H_
 
-#include "../physics_rigidbody.h"
-#include "../physics_constraint.h"
-#include "../physics3d/physics_3dworld.h"
-#include <BulletDynamics/Dynamics/btDynamicsWorld.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
+#include "../physics_common.h"
+#include "../physics_world.h"
 
-#include "glm/glm.hpp"
 #include <utility>
 #include <map>
 
+class btDynamicsWorld;
+class btCollisionConfiguration;
+class btCollisionDispatcher;
+class btSequentialImpulseConstraintSolver;
+class btBroadphaseInterface;
+
 namespace gvr {
 
-class BulletWorld : public Physics3DWorld {
+class PhysicsConstraint;
+class PhysicsRigidBody;
+
+class BulletWorld : public PhysicsWorld {
  public:
     BulletWorld();
 
@@ -56,9 +61,9 @@ class BulletWorld : public Physics3DWorld {
 
     void setGravity(glm::vec3 gravity);
 
-    glm::vec3 getGravity();
+    PhysicsVec3 getGravity() const;
 
-    static std::mutex& getLock() { return sLock; }
+    static std::mutex worldLock;
 
  private:
     void initialize();
@@ -72,10 +77,9 @@ class BulletWorld : public Physics3DWorld {
     btCollisionDispatcher *mDispatcher;
     btSequentialImpulseConstraintSolver *mSolver;
     btBroadphaseInterface *mOverlappingPairCache;
-    btNearCallback *gTmpFilter;
-    int gNearCallbackCount = 0;
-    void *gUserData = 0;
-    static std::mutex sLock;
+    //void (*gTmpFilter)(); // btNearCallback
+    //int gNearCallbackCount = 0;
+    //void *gUserData = 0;
 };
 
 }

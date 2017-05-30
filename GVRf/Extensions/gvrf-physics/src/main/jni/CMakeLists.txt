@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.4.1)
 project (gvrf-physics C CXX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fexceptions")
 add_library(gvrf-physics SHARED
-    engine/physics/bullet/bullet_gvr_utils.cpp
-    engine/physics/bullet/bullet_rigidbody.cpp
-    engine/physics/bullet/bullet_world.cpp
-    engine/physics/bullet/bullet_fixedconstraint.cpp
-    engine/physics/physics3d/physics_3dworld_jni.cpp
-    engine/physics/physics3d/physics_3drigidbody_jni.cpp
-    engine/physics/physics3d/constraints/physics_3dfixedconstraint_jni.cpp)
+    engine/bullet/bullet_gvr_utils.cpp
+    engine/bullet/bullet_rigidbody.cpp
+    engine/bullet/bullet_world.cpp
+    engine/bullet/bullet_fixedconstraint.cpp
+    engine/physics_world_jni.cpp
+    engine/physics_rigidbody_jni.cpp
+    engine/physics_fixedconstraint_jni.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/bullet3/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../Framework/framework/src/main/jni)

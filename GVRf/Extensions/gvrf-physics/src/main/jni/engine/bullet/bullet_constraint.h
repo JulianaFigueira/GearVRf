@@ -13,19 +13,17 @@
  * limitations under the License.
  */
 
-#ifndef PHYSICS_3DCONETWIST_CONSTRAINT_H_
-#define PHYSICS_3DCONETWIST_CONSTRAINT_H_
 
-#include "../../physics_constraint.h"
+#ifndef BULLET_CONSTRAINT_H
+#define BULLET_CONSTRAINT_H
 
+class btTypedConstraint;
 namespace gvr {
 
-class Physics3DConeTwistConstraint : public PhysicsConstraint {
- public:
-    Physics3DConeTwistConstraint() : PhysicsConstraint() {}
-    ~Physics3DConeTwistConstraint(){}
-};
+    class BulletConstraint {
+    public:
+        virtual btTypedConstraint* getConstraint() = 0;
+    };
 
 }
-
-#endif /* PHYSICS_3DCONETWIST_CONSTRAINT_H_ */
+#endif //BULLET_CONSTRAINT_H

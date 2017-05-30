@@ -13,19 +13,18 @@
  * limitations under the License.
  */
 
-#ifndef PHYSICS_3DRIGIDBODY_H_
-#define PHYSICS_3DRIGIDBODY_H_
 
-#include "../physics_rigidbody.h"
+#ifndef BULLET_OBJECT_H
+#define BULLET_OBJECT_H
 
+class SceneObject;
 namespace gvr {
 
-class Physics3DRigidBody : public PhysicsRigidBody {
- public:
-    Physics3DRigidBody() : PhysicsRigidBody() {}
-    ~Physics3DRigidBody(){}
-};
+    class BulletObject {
+    public:
+        virtual void set_owner_object(SceneObject* obj) = 0;
+        virtual void onAttach(SceneObject* owner) = 0;
+    };
 
 }
-
-#endif /* PHYSICS_3DRIGIDBODY_H_ */
+#endif //BULLET_OBJECT_H

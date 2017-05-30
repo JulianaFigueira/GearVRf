@@ -37,11 +37,11 @@ namespace gvr {
         }
 
     //virtual float getAppliedImpulse() const = 0;
-    //virtual float getBreakingImpulseThreshold() const = 0;
-    //virtual void setBreakingImpulseThreshold(float n) = 0;
+        //virtual float getBreakingImpulseThreshold() const = 0;
+        //virtual void setBreakingImpulseThreshold(float n) = 0;
     //virtual void getJointFeedback(JointFeedback* feedback) = 0;
     //virtual void setJointFeedback(JointFeedback const * feedback) = 0;
-        virtual void* getConstraint() = 0;
+        virtual void *getUnderlying() = 0;
 
     };
 

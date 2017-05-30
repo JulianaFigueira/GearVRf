@@ -16,7 +16,8 @@
 #ifndef BULLET_RIGIDBODY_H_
 #define BULLET_RIGIDBODY_H_
 
-#include "../physics3d/physics_3drigidbody.h"
+#include "../physics_rigidbody.h"
+#include "bullet_object.h"
 
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <LinearMath/btMotionState.h>
@@ -24,11 +25,13 @@
 namespace gvr {
 class SceneObject;
 
-class BulletRigidBody : public Physics3DRigidBody, btMotionState {
+class BulletRigidBody : public PhysicsRigidBody,
+                               BulletObject,
+                               btMotionState {
  public:
     BulletRigidBody();
 
-    virtual ~BulletRigidBody();
+    ~BulletRigidBody();
 
     btRigidBody *getRigidBody() const {
         return mRigidBody;

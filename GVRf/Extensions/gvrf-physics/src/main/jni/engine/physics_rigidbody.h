@@ -38,7 +38,7 @@ class PhysicsRigidBody : public Component {
 	PhysicsRigidBody() : Component(PhysicsRigidBody::getComponentType()) {}
 
 	static long long getComponentType() {
-	        return COMPONENT_TYPE_PHYSICS_RIGID_BODY;
+	    return COMPONENT_TYPE_PHYSICS_RIGID_BODY;
 	}
 
 	virtual void setSimulationType(SimulationType t) = 0;

@@ -13,19 +13,20 @@
  * limitations under the License.
  */
 
-#ifndef PHYSICS_3DD6CONSTRAINT_H_
-#define PHYSICS_3DD6CONSTRAINT_H_
+#ifndef PHYSICS_FIXED_CONSTRAINT_H_
+#define PHYSICS_FIXED_CONSTRAINT_H_
 
-#include "../../physics_constraint.h"
+#include "physics_constraint.h"
 
 namespace gvr {
 
-class Physics3Dd6Constraint : public PhysicsConstraint {
+class PhysicsRigidBody;
+
+class PhysicsFixedConstraint : public PhysicsConstraint {
  public:
-    Physics3Dd6Constraint() : PhysicsConstraint() {}
-    ~Physics3Dd6Constraint(){}
+    PhysicsFixedConstraint(PhysicsRigidBody *rigidBodyB) : PhysicsConstraint() {}
 };
 
 }
 
-#endif /* PHYSICS_3DD6CONSTRAINT_H_ */
+#endif /* PHYSICS_FIXED_CONSTRAINT_H_ */

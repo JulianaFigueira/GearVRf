@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "../../bullet/bullet_fixedconstraint.h"
+#include "bullet/bullet_fixedconstraint.h"
 #include <mutex>
 #include "glm/gtc/type_ptr.hpp"
 #include "util/gvr_jni.h"
@@ -35,6 +35,6 @@ namespace gvr {
 
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DFixedConstraint_getComponentType(JNIEnv * env, jobject obj) {
-        return BulletFixedConstraint::getComponentType();
+        return PhysicsConstraint::getComponentType();
     }
 }
