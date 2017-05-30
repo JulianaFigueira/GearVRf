@@ -101,6 +101,8 @@ void BulletRigidBody::onAttach(SceneObject* owner) {
                                                                       mConstructionInfo.m_localInertia);
         }
         mRigidBody->setCollisionShape(mConstructionInfo.m_collisionShape);
+        mRigidBody->setMassProps(getMass(), mConstructionInfo.m_localInertia);
+        mRigidBody->updateInertiaTensor();
         updateColisionShapeLocalScaling();
     }
     else {
