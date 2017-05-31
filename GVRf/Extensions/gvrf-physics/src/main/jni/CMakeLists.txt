@@ -8,10 +8,12 @@ add_library(gvrf-physics SHARED
     engine/bullet/bullet_world.cpp
     engine/bullet/bullet_fixedconstraint.cpp
     engine/bullet/bullet_point2pointconstraint.cpp
+    engine/bullet/bullet_hingeconstraint.cpp
     engine/physics_world_jni.cpp
     engine/physics_rigidbody_jni.cpp
     engine/physics_fixedconstraint_jni.cpp
-    engine/physics_point2pointconstraint_jni.cpp)
+    engine/physics_point2pointconstraint_jni.cpp
+    engine/physics_hingeconstraint_jni.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/bullet3/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../Framework/framework/src/main/jni)
