@@ -23,23 +23,28 @@ namespace gvr {
         jlong rigidBodyB, jfloatArray pivotInA, jfloatArray pivotInB);
 
     JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getComponentType(JNIEnv * env, jobject obj);
+    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getComponentType(JNIEnv * env,
+                                                                            jobject obj);
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setPivotInA(JNIEnv * env, jobject obj,
-        jfloat x, jfloat y, jfloat z);
+                                                                       jlong jp2p_constraint,
+                                                                       jfloat x, jfloat y,
+                                                                       jfloat z);
 
-    JNIEXPORT void JNICALL
+    JNIEXPORT jfloatArray JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getPivotInA(JNIEnv * env, jobject obj,
-        jfloatArray pivot);
+                                                                       jlong jp2p_constraint);
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setPivotInB(JNIEnv * env, jobject obj,
-        jfloat x, jfloat y, jfloat z);
+                                                                       jlong jp2p_constraint,
+                                                                       jfloat x, jfloat y,
+                                                                       jfloat z);
 
-    JNIEXPORT void JNICALL
+    JNIEXPORT jfloatArray JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getPivotInB(JNIEnv * env, jobject obj,
-        jfloatArray pivot);
+                                                                       jlong jp2p_constraint);
 
     }
 
@@ -60,21 +65,42 @@ namespace gvr {
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setPivotInA(JNIEnv * env, jobject obj,
-        jfloat x, jfloat y, jfloat z) {
+                                                                       jlong jp2p_constraint,
+                                                                       jfloat x, jfloat y,
+                                                                       jfloat z) {
+        PhysicsVec3 v(x, y, z);
+        reinterpret_cast<PhysicsPoint2pointConstraint*>(jp2p_constraint)->setPivotInA(v);
     }
 
-    JNIEXPORT void JNICALL
+    JNIEXPORT jfloatArray JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getPivotInA(JNIEnv * env, jobject obj,
-        jfloatArray pivot) {
+                                                                       jlong jp2p_constraint) {
+        PhysicsVec3 v =
+                reinterpret_cast<PhysicsPoint2pointConstraint*>(jp2p_constraint)->getPivotInA();
+        jfloatArray result = env->NewFloatArray(3);
+        env->SetFloatArrayRegion(result, 0, 3, v.vec);
+
+        return result;
     }
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setPivotInB(JNIEnv * env, jobject obj,
-        jfloat x, jfloat y, jfloat z) {
+                                                                       jlong jp2p_constraint,
+                                                                       jfloat x, jfloat y,
+                                                                       jfloat z) {
+        PhysicsVec3 v(x, y, z);
+        reinterpret_cast<PhysicsPoint2pointConstraint*>(jp2p_constraint)->setPivotInB(v);
     }
 
-    JNIEXPORT void JNICALL
+    JNIEXPORT jfloatArray JNICALL
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getPivotInB(JNIEnv * env, jobject obj,
-        jfloatArray pivot) {
+                                                                       jlong jp2p_constraint) {
+        PhysicsVec3 v =
+                reinterpret_cast<PhysicsPoint2pointConstraint*>(jp2p_constraint)->getPivotInB();
+        jfloatArray result = env->NewFloatArray(3);
+        env->SetFloatArrayRegion(result, 0, 3, v.vec);
+
+        return result;
     }
+
 }

@@ -11,20 +11,20 @@ public class GVRPoint2PointConstraint extends GVRConstraint {
         super(gvrContext, Native3DPoint2PointConstraint.ctor(rigidBodyB.getNative(), pivotInA, pivotInB));
     }
 
-    public void getPivotInA(float pivot[]) {
-        Native3DPoint2PointConstraint.getPivotInA(pivot);
+    public float[] getPivotInA(float pivot[]) {
+        return Native3DPoint2PointConstraint.getPivotInA(getNative());
     }
 
     public void setPivotInA(final float pivot[]) {
-        Native3DPoint2PointConstraint.setPivotInA(pivot[0], pivot[1], pivot[2]);
+        Native3DPoint2PointConstraint.setPivotInA(getNative(), pivot[0], pivot[1], pivot[2]);
     }
 
-    public void getPivotInB(float pivot[]) {
-        Native3DPoint2PointConstraint.getPivotInB(pivot);
+    public float[] getPivotInB() {
+        return Native3DPoint2PointConstraint.getPivotInB(getNative());
     }
 
     public void setPivotInB(final float pivot[]) {
-        Native3DPoint2PointConstraint.setPivotInB(pivot[0], pivot[1], pivot[2]);
+        Native3DPoint2PointConstraint.setPivotInB(getNative(), pivot[0], pivot[1], pivot[2]);
     }
 
     static public long getComponentType() {
@@ -37,11 +37,11 @@ class Native3DPoint2PointConstraint {
 
     static native long getComponentType();
 
-    static native void setPivotInA(float x, float y, float z);
+    static native void setPivotInA(long nativeConstraint, float x, float y, float z);
 
-    static native void getPivotInA(float pivot[]);
+    static native float[] getPivotInA(long nativeConstraint);
 
-    static native void setPivotInB(float x, float y, float z);
+    static native void setPivotInB(long nativeConstraint, float x, float y, float z);
 
-    static native void getPivotInB(float pivot[]);
+    static native float[] getPivotInB(long nativeConstraint);
 }
