@@ -42,8 +42,38 @@ namespace gvr {
 
         PhysicsVec3() : x(0), y(0), z(0) {}
         PhysicsVec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+        PhysicsVec3(float const v[]) : x(v[0]), y(v[1]), z(v[2]) {}
     };
 
+    union PhysicsMat3x3 {
+        float vec[9];
+        float mat[3][3];
+
+        void set(float const v[]) {
+            vec[0] = v[0];
+            vec[1] = v[1];
+            vec[2] = v[2];
+            vec[3] = v[3];
+            vec[4] = v[4];
+            vec[5] = v[5];
+            vec[6] = v[6];
+            vec[7] = v[7];
+            vec[8] = v[8];
+        }
+
+        PhysicsMat3x3() {}
+        PhysicsMat3x3(float const m[]) {
+            vec[0] = m[0];
+            vec[1] = m[1];
+            vec[2] = m[2];
+            vec[3] = m[3];
+            vec[4] = m[4];
+            vec[5] = m[5];
+            vec[6] = m[6];
+            vec[7] = m[7];
+            vec[8] = m[8];
+        }
+    };
 }
 
 #endif /* PHYSICS_COMMON_H_ */
