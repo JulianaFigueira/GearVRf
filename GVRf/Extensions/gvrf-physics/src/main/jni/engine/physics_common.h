@@ -45,6 +45,31 @@ namespace gvr {
         PhysicsVec3(float const v[]) : x(v[0]), y(v[1]), z(v[2]) {}
     };
 
+    union PhysicsQuat {
+        float q[4];
+        struct {
+            float x, y, z, w;
+        };
+
+        void set(float const q[]) {
+            x = q[0];
+            y = q[1];
+            z = q[2];
+            w = q[3];
+        }
+
+        void set(float x, float y, float z, float w) {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+            this->w = w;
+        }
+
+        PhysicsQuat() : x(0), y(0), z(0), w(0) {}
+        PhysicsQuat(float _x, float _y, float _z, float _w) : x(_x), y(_y), z(_z), w(_w) {}
+        PhysicsQuat(float const q[]) : x(q[0]), y(q[1]), z(q[2]), w(q[3]) {}
+    };
+
     union PhysicsMat3x3 {
         float vec[9];
         float mat[3][3];

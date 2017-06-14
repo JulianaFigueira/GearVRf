@@ -11,13 +11,15 @@ add_library(gvrf-physics SHARED
     engine/bullet/bullet_hingeconstraint.cpp
     engine/bullet/bullet_sliderconstraint.cpp
     engine/bullet/bullet_conetwistconstraint.cpp
+    engine/bullet/bullet_generic6dofconstraint.cpp
     engine/physics_world_jni.cpp
     engine/physics_rigidbody_jni.cpp
     engine/physics_fixedconstraint_jni.cpp
     engine/physics_point2pointconstraint_jni.cpp
     engine/physics_hingeconstraint_jni.cpp
     engine/physics_sliderconstraint_jni.cpp
-    engine/physics_conetwistconstraint_jni.cpp)
+    engine/physics_conetwistconstraint_jni.cpp
+    engine/physics_genericconstraint_jni.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/bullet3/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../../../../Framework/framework/src/main/jni)
