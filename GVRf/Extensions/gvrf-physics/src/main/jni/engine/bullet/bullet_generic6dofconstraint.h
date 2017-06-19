@@ -22,13 +22,14 @@
 
 #include "../physics_common.h"
 #include "../physics_genericconstraint.h"
-#include "../physics_rigidbody.h"
 #include "bullet_object.h"
 
 class btGeneric6DofConstraint;
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
+
     class BulletGeneric6dofConstraint : public PhysicsGenericConstraint, BulletObject {
     public:
         BulletGeneric6dofConstraint(PhysicsRigidBody *rigidBodyB, float const joint[],

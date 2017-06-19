@@ -77,8 +77,6 @@ class Native3DHingeConstraint {
     static native long ctor(long rbB, float pivotInA[], float pivotInB[], float axisInA[],
                             float axisInB[]);
 
-    static native long getComponentType();
-
     static native void setLimits(long nativeConstraint, float lower, float upper);
 
     static native float getLowerLimit(long nativeConstraint);

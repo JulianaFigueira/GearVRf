@@ -18,6 +18,7 @@
 //
 
 #include "physics_conetwistconstraint.h"
+#include "physics_rigidbody.h"
 #include "bullet/bullet_conetwistconstraint.h"
 
 namespace gvr {
@@ -60,7 +61,7 @@ namespace gvr {
         PhysicsMat3x3 _c_rot(env->GetFloatArrayElements(coneRotation, 0));
 
         return reinterpret_cast<jlong>(new
-                BulletConeTwistConstraint(reinterpret_cast<BulletRigidBody*>(rigidBodyB),
+                BulletConeTwistConstraint(reinterpret_cast<PhysicsRigidBody*>(rigidBodyB),
                                           _pivot, _b_rot, _c_rot));
     }
 

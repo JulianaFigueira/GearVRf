@@ -76,16 +76,10 @@ public class GVRPoint2PointConstraint extends GVRConstraint {
     public void setPivotInB(final float pivot[]) {
         Native3DPoint2PointConstraint.setPivotInB(getNative(), pivot[0], pivot[1], pivot[2]);
     }
-
-    static public long getComponentType() {
-        return Native3DPoint2PointConstraint.getComponentType();
-    }
 }
 
 class Native3DPoint2PointConstraint {
     static native long ctor(long rbB, float pivotInA[], float pivotInB[]);
-
-    static native long getComponentType();
 
     static native void setPivotInA(long nativeConstraint, float x, float y, float z);
 

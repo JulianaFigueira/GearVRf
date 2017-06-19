@@ -27,11 +27,12 @@
 class btConeTwistConstraint;
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
 
     class BulletConeTwistConstraint : public PhysicsConeTwistConstraint, BulletObject {
     public:
-        BulletConeTwistConstraint(BulletRigidBody *rigidBodyB, PhysicsVec3 pivot,
+        BulletConeTwistConstraint(PhysicsRigidBody *rigidBodyB, PhysicsVec3 pivot,
                                   PhysicsMat3x3 const &bodyRotation,
                                   PhysicsMat3x3 const &coneRotation);
 

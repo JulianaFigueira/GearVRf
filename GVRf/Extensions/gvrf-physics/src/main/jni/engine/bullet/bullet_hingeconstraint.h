@@ -27,13 +27,13 @@ class btHingeConstraint;
 
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
-
     class BulletHingeConstraint : public PhysicsHingeConstraint,
                                   BulletObject {
 
     public:
-        BulletHingeConstraint(BulletRigidBody *rigidBodyB, float const pivotInA[],
+        BulletHingeConstraint(PhysicsRigidBody *rigidBodyB, float const pivotInA[],
                               float const pivotInB[], float const axisInA[],
                               float const axisInB[]);
 

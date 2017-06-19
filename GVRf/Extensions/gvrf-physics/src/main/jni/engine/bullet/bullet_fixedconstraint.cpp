@@ -3,15 +3,16 @@
 //
 
 #include "bullet_fixedconstraint.h"
+#include "bullet_rigidbody.h"
 #include <BulletDynamics/ConstraintSolver/btFixedConstraint.h>
 
 #include <android/log.h>
 
 namespace gvr {
 
-BulletFixedConstraint::BulletFixedConstraint(BulletRigidBody* rigidBodyB) {
-    this->mFixedConstraint = 0;
-    this->mRigidBodyB = rigidBodyB;
+BulletFixedConstraint::BulletFixedConstraint(PhysicsRigidBody* rigidBodyB) {
+    mFixedConstraint = 0;
+    mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
     mBreakingImpulse = SIMD_INFINITY;
 }
 
@@ -52,9 +53,12 @@ float BulletFixedConstraint::getBreakingImpulse() const {
 }
 
 void BulletFixedConstraint::onAttach(SceneObject* owner) {
-    btRigidBody* rbA = ((BulletRigidBody*)this->owner_object()->getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
+    btRigidBody* rbA = ((BulletRigidBody*)this->owner_object()->
+            getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
 
-    this->mFixedConstraint = new btFixedConstraint(*rbA, *mRigidBodyB->getRigidBody(), mRigidBodyB->getRigidBody()->getWorldTransform(), rbA->getWorldTransform());
+    mFixedConstraint = new btFixedConstraint(*rbA, *mRigidBodyB->getRigidBody(),
+                                             mRigidBodyB->getRigidBody()->getWorldTransform(),
+                                             rbA->getWorldTransform());
     mFixedConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
 }
 

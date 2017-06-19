@@ -22,6 +22,9 @@
 namespace gvr {
 
     extern "C" {
+    JNIEXPORT jlong JNICALL
+    Java_org_gearvrf_physics_Native3DConstraint_getComponentType(JNIEnv * env, jobject obj);
+
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DConstraint_setBreakingImpulse(JNIEnv * env, jobject obj,
                                                                    jlong jconstraint,
@@ -30,6 +33,11 @@ namespace gvr {
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DConstraint_getBreakingImpulse(JNIEnv * env, jobject obj,
                                                                    jlong jconstraint);
+    }
+
+    JNIEXPORT jlong JNICALL
+    Java_org_gearvrf_physics_Native3DConstraint_getComponentType(JNIEnv * env, jobject obj) {
+        return PhysicsConstraint::getComponentType();
     }
 
     JNIEXPORT void JNICALL

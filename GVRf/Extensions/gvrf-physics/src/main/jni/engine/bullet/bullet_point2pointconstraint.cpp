@@ -9,10 +9,10 @@
 
 namespace gvr {
 
-    BulletPoint2PointConstraint::BulletPoint2PointConstraint(BulletRigidBody* rigidBodyB,
+    BulletPoint2PointConstraint::BulletPoint2PointConstraint(PhysicsRigidBody* rigidBodyB,
             float pivotInA[], float pivotInB[]) {
         mPoint2PointConstraint = 0;
-        mRigidBodyB = rigidBodyB;
+        mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
         mBreakingImpulse = SIMD_INFINITY;
         mPivotInA.set(pivotInA);
         mPivotInB.set(pivotInB);

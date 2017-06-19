@@ -15,8 +15,6 @@
 #include <algorithm>
 #include "bullet_world.h"
 #include "bullet_rigidbody.h"
-#include "bullet_constraint.h"
-#include "util/gvr_log.h"
 
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>

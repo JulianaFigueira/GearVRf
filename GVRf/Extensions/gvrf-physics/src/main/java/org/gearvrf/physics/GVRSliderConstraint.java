@@ -114,8 +114,6 @@ public class GVRSliderConstraint extends GVRConstraint {
 class Native3DSliderConstraint {
     static native long ctor(long rbB);
 
-    static native long getComponentType();
-
     static native void setAngularLowerLimit(long nativeConstraint, float limit);
 
     static native float getAngularLowerLimit(long nativeConstraint);

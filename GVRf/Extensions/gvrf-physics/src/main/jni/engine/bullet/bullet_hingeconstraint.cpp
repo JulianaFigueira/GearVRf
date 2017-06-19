@@ -23,11 +23,11 @@
 
 namespace gvr {
 
-    BulletHingeConstraint::BulletHingeConstraint(BulletRigidBody *rigidBodyB, const float *pivotInA,
+    BulletHingeConstraint::BulletHingeConstraint(PhysicsRigidBody *rigidBodyB, const float *pivotInA,
                                                  const float *pivotInB, const float *axisInA,
                                                  const float *axisInB) {
         mHingeConstraint = 0;
-        mRigidBodyB = rigidBodyB;
+        mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
         mBreakingImpulse = SIMD_INFINITY;
         mPivotInA.set(pivotInA);
         mPivotInB.set(pivotInB);

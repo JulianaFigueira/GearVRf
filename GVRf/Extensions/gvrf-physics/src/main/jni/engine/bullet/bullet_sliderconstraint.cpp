@@ -24,8 +24,8 @@
 
 namespace gvr {
 
-    BulletSliderConstraint::BulletSliderConstraint(BulletRigidBody *rigidBodyB) {
-        mRigidBodyB = rigidBodyB;
+    BulletSliderConstraint::BulletSliderConstraint(PhysicsRigidBody *rigidBodyB) {
+        mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
         mSliderConstraint = 0;
 
         mBreakingImpulse = SIMD_INFINITY;

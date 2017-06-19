@@ -58,9 +58,15 @@ abstract class GVRConstraint extends GVRPhysicsWorldObject {
     public float getBreakingImpulse() {
         return Native3DConstraint.getBreakingImpulse(getNative());
     }
+
+    static public long getComponentType() {
+        return Native3DConstraint.getComponentType();
+    }
 }
 
 class Native3DConstraint {
+    static native long getComponentType();
+
     static native void setBreakingImpulse(long nativeConstraint, float impulse);
 
     static native float getBreakingImpulse(long nativeConstraint);

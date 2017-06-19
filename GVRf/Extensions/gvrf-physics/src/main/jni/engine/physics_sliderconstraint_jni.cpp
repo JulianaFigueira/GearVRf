@@ -18,6 +18,7 @@
 //
 
 #include "physics_sliderconstraint.h"
+#include "physics_rigidbody.h"
 #include "bullet/bullet_sliderconstraint.h"
 
 namespace gvr {
@@ -26,9 +27,6 @@ namespace gvr {
     JNIEXPORT jlong JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_ctor(JNIEnv * env, jobject obj,
                                                            jlong rigidBodyB);
-
-    JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DSliderConstraint_getComponentType(JNIEnv * env, jobject obj);
 
     JNIEXPORT void JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_setAngularLowerLimit(JNIEnv * env,
@@ -79,12 +77,7 @@ namespace gvr {
     Java_org_gearvrf_physics_Native3DSliderConstraint_ctor(JNIEnv * env, jobject obj,
                                                            jlong rigidBodyB) {
         return reinterpret_cast<jlong>(new
-                BulletSliderConstraint(reinterpret_cast<BulletRigidBody*>(rigidBodyB)));
-    }
-
-    JNIEXPORT jlong JNICALL
-    Java_org_gearvrf_physics_Native3DSliderConstraint_getComponentType(JNIEnv * env, jobject obj) {
-        return PhysicsConstraint::getComponentType();
+                BulletSliderConstraint(reinterpret_cast<PhysicsRigidBody*>(rigidBodyB)));
     }
 
     JNIEXPORT void JNICALL

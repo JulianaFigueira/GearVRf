@@ -24,13 +24,14 @@ class btPoint2PointConstraint;
 
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
 
     class BulletPoint2PointConstraint : public PhysicsPoint2pointConstraint,
                                                BulletObject {
 
     public:
-        BulletPoint2PointConstraint(BulletRigidBody* rigidBodyB, float pivotInA[],
+        BulletPoint2PointConstraint(PhysicsRigidBody* rigidBodyB, float pivotInA[],
                                     float pivotInB[]);
 
         ~BulletPoint2PointConstraint();

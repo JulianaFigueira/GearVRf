@@ -24,12 +24,12 @@
 #include <LinearMath/btScalar.h>
 
 namespace gvr {
-    BulletConeTwistConstraint::BulletConeTwistConstraint(BulletRigidBody *rigidBodyB,
+    BulletConeTwistConstraint::BulletConeTwistConstraint(PhysicsRigidBody *rigidBodyB,
                                                          PhysicsVec3 pivot,
                                                          PhysicsMat3x3 const &bodyRotation,
                                                          PhysicsMat3x3 const &coneRotation) {
         mConeTwistConstraint = 0;
-        mRigidBodyB = rigidBodyB;
+        mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
 
         mBreakingImpulse = SIMD_INFINITY;
         mPivot = pivot;

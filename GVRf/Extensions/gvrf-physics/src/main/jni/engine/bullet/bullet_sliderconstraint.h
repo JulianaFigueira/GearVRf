@@ -27,12 +27,13 @@ class btSliderConstraint;
 
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
 
     class BulletSliderConstraint : public PhysicsSliderConstraint,
                                           BulletObject {
     public:
-        BulletSliderConstraint(BulletRigidBody *rigidBodyB);
+        BulletSliderConstraint(PhysicsRigidBody *rigidBodyB);
 
         ~BulletSliderConstraint();
 

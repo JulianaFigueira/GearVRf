@@ -18,6 +18,7 @@
 //
 
 #include "physics_hingeconstraint.h"
+#include "physics_rigidbody.h"
 #include "bullet/bullet_hingeconstraint.h"
 
 namespace gvr {
@@ -55,7 +56,7 @@ namespace gvr {
         float *aA = env->GetFloatArrayElements(axisInA, 0);
         float *aB = env->GetFloatArrayElements(axisInB, 0);
         return reinterpret_cast<jlong>(new BulletHingeConstraint(
-                reinterpret_cast<BulletRigidBody*>(rigidBodyB), pA, pB, aA, aB));
+                reinterpret_cast<PhysicsRigidBody*>(rigidBodyB), pA, pB, aA, aB));
     }
 
     JNIEXPORT jlong JNICALL

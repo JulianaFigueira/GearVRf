@@ -20,20 +20,18 @@
 #include "../physics_fixedconstraint.h"
 #include "bullet_object.h"
 
-#include "bullet_rigidbody.h"
-#include "bullet_world.h"
-
 class btFixedConstraint;
 
 namespace gvr {
 
+    class PhysicsRigidBody;
     class BulletRigidBody;
 
     class BulletFixedConstraint : public PhysicsConstraint,
                                          BulletObject  {
 
     public:
-        BulletFixedConstraint(BulletRigidBody* rigidBodyB);
+        BulletFixedConstraint(PhysicsRigidBody* rigidBodyB);
 
         ~BulletFixedConstraint();
 
