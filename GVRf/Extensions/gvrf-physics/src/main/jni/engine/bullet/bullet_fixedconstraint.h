@@ -43,12 +43,18 @@ namespace gvr {
             return this->mFixedConstraint;
         }
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
     private:
         void onAttach(SceneObject* owner);
 
     private:
         btFixedConstraint *mFixedConstraint;
         BulletRigidBody *mRigidBodyB; //this is A
+
+        float mBreakingImpulse;
     };
 
 }

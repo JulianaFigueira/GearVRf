@@ -41,6 +41,10 @@ namespace gvr {
             return this->mPoint2PointConstraint;
         }
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
         void setPivotInA(PhysicsVec3 pivot);
 
         PhysicsVec3 getPivotInA() const { return mPivotInA; }
@@ -56,6 +60,7 @@ namespace gvr {
         btPoint2PointConstraint *mPoint2PointConstraint;
         BulletRigidBody *mRigidBodyB;
 
+        float mBreakingImpulse;
         PhysicsVec3 mPivotInA;
         PhysicsVec3 mPivotInB;
     };

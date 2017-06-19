@@ -52,6 +52,10 @@ namespace gvr {
 
         float getLinearUpperLimit() const;
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
         void set_owner_object(SceneObject* obj);
 
         void *getUnderlying() { return mSliderConstraint; }
@@ -62,6 +66,7 @@ namespace gvr {
         btSliderConstraint *mSliderConstraint;
         BulletRigidBody *mRigidBodyB;
 
+        float mBreakingImpulse;
         float mLowerAngularLimit;
         float mUpperAngularLimit;
         float mLowerLinearLimit;

@@ -31,6 +31,7 @@ namespace gvr {
         mConeTwistConstraint = 0;
         mRigidBodyB = rigidBodyB;
 
+        mBreakingImpulse = SIMD_INFINITY;
         mPivot = pivot;
         mBodyRotation = bodyRotation;
         mConeRotation = coneRotation;
@@ -81,6 +82,24 @@ namespace gvr {
         }
     }
 
+    void BulletConeTwistConstraint::setBreakingImpulse(float impulse) {
+        if (0 != mConeTwistConstraint) {
+            mConeTwistConstraint->setBreakingImpulseThreshold(impulse);
+        }
+        else {
+            mBreakingImpulse = impulse;
+        }
+    }
+
+    float BulletConeTwistConstraint::getBreakingImpulse() const {
+        if (0 != mConeTwistConstraint) {
+            return mConeTwistConstraint->getBreakingImpulseThreshold();
+        }
+        else {
+            return mBreakingImpulse;
+        }
+    }
+
     void BulletConeTwistConstraint::set_owner_object(SceneObject* obj) {
         if (obj == owner_object())
         {
@@ -116,5 +135,6 @@ namespace gvr {
 
         mConeTwistConstraint = new btConeTwistConstraint(*rbA, *mRigidBodyB->getRigidBody(), fA, fB);
         mConeTwistConstraint->setLimit(mSwingLimit, mSwingLimit, mTwistLimit);
+        mConeTwistConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
     }
 }

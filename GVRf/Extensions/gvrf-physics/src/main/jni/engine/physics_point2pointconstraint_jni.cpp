@@ -46,6 +46,17 @@ namespace gvr {
     Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getPivotInB(JNIEnv * env, jobject obj,
                                                                        jlong jp2p_constraint);
 
+
+    JNIEXPORT void JNICALL
+    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setBreakingImpulse(JNIEnv * env,
+                                                                              jobject obj,
+                                                                              jlong jp2p_constraint,
+                                                                              jfloat impulse);
+
+    JNIEXPORT jfloat JNICALL
+    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getBreakingLimit(JNIEnv * env,
+                                                                            jobject obj,
+                                                                            jlong jp2p_constraint);
     }
 
     JNIEXPORT jlong JNICALL
@@ -101,6 +112,21 @@ namespace gvr {
         env->SetFloatArrayRegion(result, 0, 3, v.vec);
 
         return result;
+    }
+
+    JNIEXPORT void JNICALL
+    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_setBreakingImpulse(JNIEnv * env,
+                                                                              jobject obj,
+                                                                              jlong jp2p_constraint,
+                                                                              jfloat impulse) {
+        reinterpret_cast<PhysicsConstraint*>(jp2p_constraint)->setBreakingImpulse(impulse);
+    }
+
+    JNIEXPORT jfloat JNICALL
+    Java_org_gearvrf_physics_Native3DPoint2PointConstraint_getBreakingLimit(JNIEnv * env,
+                                                                            jobject obj,
+                                                                            jlong jp2p_constraint) {
+        return reinterpret_cast<PhysicsConstraint*>(jp2p_constraint)->getBreakingImpulse();
     }
 
 }

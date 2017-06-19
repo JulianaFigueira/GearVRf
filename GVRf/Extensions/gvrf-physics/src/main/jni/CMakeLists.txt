@@ -14,6 +14,7 @@ add_library(gvrf-physics SHARED
     engine/bullet/bullet_generic6dofconstraint.cpp
     engine/physics_world_jni.cpp
     engine/physics_rigidbody_jni.cpp
+    engine/physics_constraint_jni.cpp
     engine/physics_fixedconstraint_jni.cpp
     engine/physics_point2pointconstraint_jni.cpp
     engine/physics_hingeconstraint_jni.cpp

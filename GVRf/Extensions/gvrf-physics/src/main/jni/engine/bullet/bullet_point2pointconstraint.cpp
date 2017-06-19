@@ -13,6 +13,7 @@ namespace gvr {
             float pivotInA[], float pivotInB[]) {
         mPoint2PointConstraint = 0;
         mRigidBodyB = rigidBodyB;
+        mBreakingImpulse = SIMD_INFINITY;
         mPivotInA.set(pivotInA);
         mPivotInB.set(pivotInB);
     };
@@ -39,6 +40,24 @@ namespace gvr {
         mPoint2PointConstraint->setPivotB(p);
     }
 
+    void BulletPoint2PointConstraint::setBreakingImpulse(float impulse) {
+        if (0 != mPoint2PointConstraint) {
+            mPoint2PointConstraint->setBreakingImpulseThreshold(impulse);
+        }
+        else {
+            mBreakingImpulse = impulse;
+        }
+    }
+
+    float BulletPoint2PointConstraint::getBreakingImpulse() const {
+        if (0 != mPoint2PointConstraint) {
+            return mPoint2PointConstraint->getBreakingImpulseThreshold();
+        }
+        else {
+            return mBreakingImpulse;
+        }
+    }
+
     void BulletPoint2PointConstraint::set_owner_object(SceneObject* obj) {
         if (obj == owner_object())
         {
@@ -54,9 +73,12 @@ namespace gvr {
     void BulletPoint2PointConstraint::onAttach(SceneObject* owner) {
         btVector3 pivotInA(mPivotInA.x, mPivotInA.y, mPivotInA.z);
         btVector3 pivotInB(mPivotInB.x, mPivotInB.y, mPivotInB.z);
-        btRigidBody* rbA = ((BulletRigidBody*)owner_object()->getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
+        btRigidBody* rbA = ((BulletRigidBody*)owner_object()->
+                getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
 
-        this->mPoint2PointConstraint = new btPoint2PointConstraint(*rbA, *mRigidBodyB->getRigidBody(), pivotInA, pivotInB);
+        mPoint2PointConstraint = new btPoint2PointConstraint(*rbA, *mRigidBodyB->getRigidBody(),
+                                                             pivotInA, pivotInB);
+        mPoint2PointConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
     }
 
 }

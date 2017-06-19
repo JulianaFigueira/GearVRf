@@ -28,6 +28,8 @@ namespace gvr {
         mRigidBodyB = rigidBodyB;
         mSliderConstraint = 0;
 
+        mBreakingImpulse = SIMD_INFINITY;
+
         // Default values from btSliderConstraint
         mLowerAngularLimit = 0.0f;
         mUpperAngularLimit = 0.0f;
@@ -104,6 +106,24 @@ namespace gvr {
         }
     }
 
+    void BulletSliderConstraint::setBreakingImpulse(float impulse) {
+        if (0 != mSliderConstraint) {
+            mSliderConstraint->setBreakingImpulseThreshold(impulse);
+        }
+        else {
+            mBreakingImpulse = impulse;
+        }
+    }
+
+    float BulletSliderConstraint::getBreakingImpulse() const {
+        if (0 != mSliderConstraint) {
+            return mSliderConstraint->getBreakingImpulseThreshold();
+        }
+        else {
+            return mBreakingImpulse;
+        }
+    }
+
     float BulletSliderConstraint::getLinearUpperLimit() const {
         if (0 != mSliderConstraint) {
             return mSliderConstraint->getUpperLinLimit();
@@ -139,6 +159,7 @@ namespace gvr {
         mSliderConstraint->setUpperAngLimit(mUpperAngularLimit);
         mSliderConstraint->setLowerLinLimit(mLowerLinearLimit);
         mSliderConstraint->setUpperLinLimit(mUpperLinearLimit);
+        mSliderConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
     }
 
 }

@@ -51,12 +51,17 @@ namespace gvr {
             return this->mConeTwistConstraint;
         }
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
     private:
         void onAttach(SceneObject* owner);
 
         btConeTwistConstraint *mConeTwistConstraint;
         BulletRigidBody *mRigidBodyB;
 
+        float mBreakingImpulse;
         PhysicsVec3 mPivot;
         PhysicsMat3x3 mBodyRotation;
         PhysicsMat3x3 mConeRotation;

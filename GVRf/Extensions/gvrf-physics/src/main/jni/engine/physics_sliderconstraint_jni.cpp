@@ -92,14 +92,14 @@ namespace gvr {
                                                                            jobject obj,
                                                                            jlong jsliderconstraint,
                                                                            jfloat limit) {
-        reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->setAngularLowerLimit(limit);
+        reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->setAngularLowerLimit(limit);
     }
 
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_getAngularLowerLimit(JNIEnv * env,
                                                                            jobject obj,
                                                                            jlong jsliderconstraint) {
-        return reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->getAngularLowerLimit();
+        return reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->getAngularLowerLimit();
     }
 
     JNIEXPORT void JNICALL
@@ -107,14 +107,14 @@ namespace gvr {
                                                                            jobject obj,
                                                                            jlong jsliderconstraint,
                                                                            jfloat limit) {
-        reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->setAngularUpperLimit(limit);
+        reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->setAngularUpperLimit(limit);
     }
 
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_getAngularUpperLimit(JNIEnv * env,
                                                                            jobject obj,
                                                                            jlong jsliderconstraint) {
-        return reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->getAngularUpperLimit();
+        return reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->getAngularUpperLimit();
     }
 
     JNIEXPORT void JNICALL
@@ -122,14 +122,14 @@ namespace gvr {
                                                                           jobject obj,
                                                                           jlong jsliderconstraint,
                                                                           jfloat limit) {
-        reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->setLinearLowerLimit(limit);
+        reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->setLinearLowerLimit(limit);
     }
 
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_getLinearLowerLimit(JNIEnv * env,
                                                                           jobject obj,
                                                                           jlong jsliderconstraint) {
-        return reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->getLinearLowerLimit();
+        return reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->getLinearLowerLimit();
     }
 
     JNIEXPORT void JNICALL
@@ -137,14 +137,14 @@ namespace gvr {
                                                                           jobject obj,
                                                                           jlong jsliderconstraint,
                                                                           jfloat limit) {
-        reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->setLinearUpperLimit(limit);
+        reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->setLinearUpperLimit(limit);
     }
 
     JNIEXPORT jfloat JNICALL
     Java_org_gearvrf_physics_Native3DSliderConstraint_getLinearUpperLimit(JNIEnv * env,
                                                                           jobject obj,
                                                                           jlong jsliderconstraint) {
-        return reinterpret_cast<BulletSliderConstraint*>(jsliderconstraint)->getLinearUpperLimit();
+        return reinterpret_cast<PhysicsSliderConstraint*>(jsliderconstraint)->getLinearUpperLimit();
     }
 
 }

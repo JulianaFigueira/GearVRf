@@ -33,6 +33,7 @@ namespace gvr {
 
         mRigidBodyB = reinterpret_cast<BulletRigidBody*>(rigidBodyB);
 
+        mBreakingImpulse = SIMD_INFINITY;
         mPosition.set(joint);
         mRotationA.set(rotationA);
         mRotationB.set(rotationB);
@@ -124,6 +125,24 @@ namespace gvr {
         }
     }
 
+    void BulletGeneric6dofConstraint::setBreakingImpulse(float impulse) {
+        if (0 != mGeneric6DofConstraint) {
+            mGeneric6DofConstraint->setBreakingImpulseThreshold(impulse);
+        }
+        else {
+            mBreakingImpulse = impulse;
+        }
+    }
+
+    float BulletGeneric6dofConstraint::getBreakingImpulse() const {
+        if (0 != mGeneric6DofConstraint) {
+            return mGeneric6DofConstraint->getBreakingImpulseThreshold();
+        }
+        else {
+            return mBreakingImpulse;
+        }
+    }
+
     void BulletGeneric6dofConstraint::set_owner_object(SceneObject *obj) {
         if (obj == owner_object()) {
             return;
@@ -158,5 +177,6 @@ namespace gvr {
         mGeneric6DofConstraint->setLinearUpperLimit(Common2Bullet(mLinearUpperLimits));
         mGeneric6DofConstraint->setAngularLowerLimit(Common2Bullet(mAngularLowerLimits));
         mGeneric6DofConstraint->setAngularUpperLimit(Common2Bullet(mAngularUpperLimits));
+        mGeneric6DofConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
     }
 }

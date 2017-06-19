@@ -12,6 +12,7 @@ namespace gvr {
 BulletFixedConstraint::BulletFixedConstraint(BulletRigidBody* rigidBodyB) {
     this->mFixedConstraint = 0;
     this->mRigidBodyB = rigidBodyB;
+    mBreakingImpulse = SIMD_INFINITY;
 }
 
 BulletFixedConstraint::~BulletFixedConstraint() {
@@ -32,10 +33,29 @@ void BulletFixedConstraint::set_owner_object(SceneObject* obj) {
     }
 }
 
+void BulletFixedConstraint::setBreakingImpulse(float impulse) {
+    if (0 != mFixedConstraint) {
+        mFixedConstraint->setBreakingImpulseThreshold(impulse);
+    }
+    else {
+        mBreakingImpulse = impulse;
+    }
+}
+
+float BulletFixedConstraint::getBreakingImpulse() const {
+    if (0 != mFixedConstraint) {
+        return mFixedConstraint->getBreakingImpulseThreshold();
+    }
+    else {
+        return mBreakingImpulse;
+    }
+}
+
 void BulletFixedConstraint::onAttach(SceneObject* owner) {
     btRigidBody* rbA = ((BulletRigidBody*)this->owner_object()->getComponent(COMPONENT_TYPE_PHYSICS_RIGID_BODY))->getRigidBody();
 
     this->mFixedConstraint = new btFixedConstraint(*rbA, *mRigidBodyB->getRigidBody(), mRigidBodyB->getRigidBody()->getWorldTransform(), rbA->getWorldTransform());
+    mFixedConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
 }
 
 }

@@ -28,6 +28,7 @@ namespace gvr {
                                                  const float *axisInB) {
         mHingeConstraint = 0;
         mRigidBodyB = rigidBodyB;
+        mBreakingImpulse = SIMD_INFINITY;
         mPivotInA.set(pivotInA);
         mPivotInB.set(pivotInB);
         mAxisInA.set(axisInA);
@@ -72,6 +73,24 @@ namespace gvr {
         }
     }
 
+    void BulletHingeConstraint::setBreakingImpulse(float impulse) {
+        if (0 != mHingeConstraint) {
+            mHingeConstraint->setBreakingImpulseThreshold(impulse);
+        }
+        else {
+            mBreakingImpulse = impulse;
+        }
+    }
+
+    float BulletHingeConstraint::getBreakingImpulse() const {
+        if (0 != mHingeConstraint) {
+            return mHingeConstraint->getBreakingImpulseThreshold();
+        }
+        else {
+            return mBreakingImpulse;
+        }
+    }
+
     void BulletHingeConstraint::set_owner_object(SceneObject *obj) {
         if (obj == owner_object())
         {
@@ -93,5 +112,6 @@ namespace gvr {
 
         mHingeConstraint = new btHingeConstraint(*rbA, *mRigidBodyB->getRigidBody(), pivotInA, pivotInB, axisInA, axisInB);
         mHingeConstraint->setLimit(mTempLower, mTempUpper);
+        mHingeConstraint->setBreakingImpulseThreshold(mBreakingImpulse);
     }
 }

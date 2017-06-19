@@ -49,6 +49,10 @@ namespace gvr {
 
         void *getUnderlying() { return mHingeConstraint; }
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
     private:
         void onAttach(SceneObject* owner);
 
@@ -56,6 +60,7 @@ namespace gvr {
         btHingeConstraint *mHingeConstraint;
         BulletRigidBody *mRigidBodyB;
 
+        float mBreakingImpulse;
         float mTempLower;
         float mTempUpper;
 

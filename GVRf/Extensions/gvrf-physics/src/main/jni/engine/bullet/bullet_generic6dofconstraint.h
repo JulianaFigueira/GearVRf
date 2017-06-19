@@ -54,6 +54,10 @@ namespace gvr {
 
         void *getUnderlying() { return mGeneric6DofConstraint;}
 
+        void setBreakingImpulse(float impulse);
+
+        float getBreakingImpulse() const;
+
         void set_owner_object(SceneObject* obj);
 
     private:
@@ -62,6 +66,7 @@ namespace gvr {
         btGeneric6DofConstraint *mGeneric6DofConstraint;
         BulletRigidBody *mRigidBodyB;
 
+        float mBreakingImpulse;
         PhysicsVec3 mLinearLowerLimits;
         PhysicsVec3 mLinearUpperLimits;
         PhysicsVec3 mAngularLowerLimits;

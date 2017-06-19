@@ -43,6 +43,9 @@ namespace gvr {
     //virtual void setJointFeedback(JointFeedback const * feedback) = 0;
         virtual void *getUnderlying() = 0;
 
+        virtual void setBreakingImpulse(float impulse) = 0;
+        virtual float getBreakingImpulse() const = 0;
+
     };
 
 }
