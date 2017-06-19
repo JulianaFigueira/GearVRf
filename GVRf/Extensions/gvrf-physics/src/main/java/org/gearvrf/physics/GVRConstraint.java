@@ -51,10 +51,20 @@ abstract class GVRConstraint extends GVRPhysicsWorldObject {
         }
     }
 
+    /**
+     * Sets the breaking impulse for a constraint.
+     *
+     * @param impulse the breaking impulse value.
+     */
     public void setBreakingImpulse(float impulse) {
         Native3DConstraint.setBreakingImpulse(getNative(), impulse);
     }
 
+    /**
+     * Gets the breaking impulse for a constraint.
+     *
+     * @return the breaking impulse value for the constraint.
+     */
     public float getBreakingImpulse() {
         return Native3DConstraint.getBreakingImpulse(getNative());
     }
